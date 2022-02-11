@@ -2,6 +2,10 @@
 
 function OnHackPacificDone(success)
     if success then
+        local VaultWait = Config.PacificVaultWait / 1000
+        local VaultWaitMins = tonumber(VaultWait) / 60
+        QBCore.Functions.Notify("Door Opening in: "..math.floor(VaultWaitMins).." Minutes", 'success')
+        Wait(Config.PacificVaultWait)
         TriggerServerEvent('qb-bankrobbery:server:setBankState', "pacific", true)
     else
         QBCore.Functions.Notify("You Suck!", 'error')

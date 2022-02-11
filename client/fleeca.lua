@@ -110,6 +110,10 @@ end
 
 local function OnHackDone(success)
     if success then
+        local VaultWait = Config.FleecaVaultWait / 1000
+        local VaultWaitMins = tonumber(VaultWait) / 60
+        QBCore.Functions.Notify("Door Opening in: "..math.floor(VaultWaitMins).." Minutes", 'success')
+        Wait(Config.FleecaVaultWait)
         TriggerServerEvent('qb-bankrobbery:server:setBankState', closestBank, true)
     else
 		QBCore.Functions.Notify("You Suck!", 'error')

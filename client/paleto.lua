@@ -1,5 +1,9 @@
 function OnPaletoHackDone(success)
     if success then
+        local VaultWait = Config.PaletoVaultWait / 1000
+        local VaultWaitMins = tonumber(VaultWait) / 60
+        QBCore.Functions.Notify("Door Opening in: "..math.floor(VaultWaitMins).." Minutes", 'success')
+        Wait(Config.PaletoVaultWait)
         TriggerServerEvent('qb-bankrobbery:server:setBankState', "paleto", true)
     else
 		QBCore.Functions.Notify("You Suck!", 'error')
@@ -101,7 +105,7 @@ RegisterNetEvent('qb-bankrobbery:client:ThermitePaletoDoor', function()
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
     if #(pos - vector3(Config.BigBanks["paleto"]["thermite"][1]["coords"].x, Config.BigBanks["paleto"]["thermite"][1]["coords"].y, Config.BigBanks["paleto"]["thermite"][1]["coords"].z)) < 10.0 then
-        if not Config.BigBanks["pacific"]["thermite"][1]["isOpened"] then
+        if not Config.BigBanks["paleto"]["thermite"][1]["isOpened"] then
             local dist = #(pos - vector3(Config.BigBanks["paleto"]["thermite"][1]["coords"].x, Config.BigBanks["paleto"]["thermite"][1]["coords"].y, Config.BigBanks["paleto"]["thermite"][1]["coords"].z))
             if dist < 1 then
                 QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)

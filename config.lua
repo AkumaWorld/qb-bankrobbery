@@ -11,6 +11,11 @@ Config.MinimumPaletoPolice = 0
 Config.MinimumPacificPolice = 0
 Config.MinimumVaultPolice = 0 -- K4MBI MAP
 
+-- Wait Times for Vault Opening
+Config.FleecaVaultWait = 180000 -- 3 Mins
+Config.PaletoVaultWait = 300000 -- 5 Mins
+Config.PacificVaultWait = 300000 -- 5 Mins
+
 -- Laptop Pricing for menu
 Config.PinkLaptopPrice = 10000
 Config.GreenLaptopPrice = 20000
