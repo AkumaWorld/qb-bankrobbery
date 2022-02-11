@@ -5,7 +5,6 @@ local requiredItemsShowed = false
 local copsCalled = false
 local PlayerJob = {}
 local refreshed = false
-currentThermiteGate = 0
 CurrentCops = 0
 
 -- Handlers
@@ -334,7 +333,9 @@ RegisterNetEvent('electronickit:UseElectronickit', function()
                                                     streetLabel = streetLabel .. " " .. street2
                                                 end
                                                 if Config.SmallBanks[closestBank]["alarm"] then
-                                                    TriggerServerEvent("qb-bankrobbery:server:callCops", "small", closestBank, streetLabel, pos)
+                                                    cameraId = Config.SmallBanks[closestBank]['camId']
+                                                    bank = 'Fleeca'
+                                                    TriggerEvent('qb-dispatch:bankrobbery', bank, cameraId)
                                                     copsCalled = true
                                                 end
                                             end

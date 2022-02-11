@@ -117,7 +117,9 @@ RegisterNetEvent('qb-bankrobbery:UseBankcardA', function()
                                     streetLabel = streetLabel .. " " .. street2
                                 end
                                 if Config.BigBanks["paleto"]["alarm"] then
-                                    TriggerServerEvent("qb-bankrobbery:server:callCops", "paleto", 0, streetLabel, pos)
+                                    cameraId = Config.BigBanks['paleto']['camId']
+                                    bank = 'Paleto'
+                                    TriggerEvent('qb-dispatch:bankrobbery', bank, cameraId)
                                     copsCalled = true
                                 end
                             end

@@ -2,10 +2,14 @@ Config = Config or {}
 
 Config.ItemTiers = 1
 
-Config.MinimumPaletoPolice = 4
+Config.MinimumVaultPolice = 6 -- K4MBI MAP
 Config.MinimumPacificPolice = 5
+Config.MinimumPaletoPolice = 4
 Config.MinimumFleecaPolice = 3
 Config.MinimumThermitePolice = 2
+
+Config.BigBankTimer = 60
+Config.SmallBankTimer = 30
 
 Config.HitsNeeded = 13 -- The amount of powerstation needed to be hit to cause a blackout
 
@@ -15,7 +19,14 @@ Config.RewardTypes = {
     },
     [2] = {
         type = "money",
-        maxAmount = 500
+        minFleecaAmount = 2,
+        maxFleecaAmount = 5,
+        minPaletoAmount = 3,
+        maxPaletoAmount = 6,
+        minPacificAmount = 4,
+        maxPacificAmount = 8,
+        minVaultAmount = 5,
+        maxVaultAmount = 10
     }
 }
 
@@ -44,6 +55,18 @@ Config.LockerRewardsPaleto = {
 }
 
 Config.LockerRewardsPacific = {
+    ["tier1"] = {
+        [1] = {item = "goldbar", minAmount = 4, maxAmount = 8},
+    },
+    ["tier2"] = {
+        [1] = {item = "goldbar", minAmount = 4, maxAmount = 8},
+    },
+    ["tier3"] = {
+        [1] = {item = "goldbar", minAmount = 4, maxAmount = 8},
+    },
+}
+
+Config.LockerRewardsVault = {
     ["tier1"] = {
         [1] = {item = "goldbar", minAmount = 4, maxAmount = 8},
     },

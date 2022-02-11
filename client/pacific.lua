@@ -51,7 +51,8 @@ RegisterNetEvent('qb-bankrobbery:UseBankcardB', function()
                                     streetLabel = streetLabel .. " " .. street2
                                 end
                                 if Config.BigBanks["pacific"]["alarm"] then
-                                    TriggerServerEvent("qb-bankrobbery:server:callCops", "pacific", 0, streetLabel, pos)
+                                    bank = 'Pacific'
+                                    TriggerEvent('qb-dispatch:bankrobbery', bank, 1)
                                     copsCalled = true
                                 end
                             end
@@ -113,7 +114,8 @@ RegisterNetEvent('electronickit:UseElectronickit', function()
                                                 streetLabel = streetLabel .. " " .. street2
                                             end
                                             if Config.BigBanks["pacific"]["alarm"] then
-                                                TriggerServerEvent("qb-bankrobbery:server:callCops", "pacific", 0, streetLabel, pos)
+                                                bank = 'Pacific'
+                                                TriggerEvent('qb-dispatch:bankrobbery', bank, 1) 
                                                 copsCalled = true
                                             end
                                         end

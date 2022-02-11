@@ -70,7 +70,7 @@ RegisterNetEvent('thermite:UseThermite', function()
                             TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["thermite"], 'remove')
                         end)
                     else 
-                        QBCore.Functions.Notify('Fuse blown already', 'error', '3500')
+                        QBCore.Functions.Notify('Fuse blown already', 'error', '5000')
                     end
                 end
             end
@@ -90,7 +90,7 @@ CreateThread(function()
       exports['qb-target']:AddBoxZone('PowerStation'..math.random(1,20), vector3(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z), 1.5, 1.5, {
           name = 'PowerStation'..math.random(1,20), 
           heading = Config.PowerStations[k]['coords'].w,
-          debugPoly = true,
+          debugPoly = false,
           minZ = Config.PowerStations[k]['coords'].z-1,
           maxZ = Config.PowerStations[k]['coords'].z+2,
           }, {
