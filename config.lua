@@ -4,12 +4,14 @@ Config.DebugPoly = false
 
 Config.ItemTiers = 1
 
+-- Minimum Police Needed
 Config.MinimumThermitePolice = 0
 Config.MinimumFleecaPolice = 0
 Config.MinimumPaletoPolice = 0
 Config.MinimumPacificPolice = 0
 Config.MinimumVaultPolice = 0 -- K4MBI MAP
 
+-- Laptop Pricing for menu
 Config.PinkLaptopPrice = 10000
 Config.GreenLaptopPrice = 20000
 Config.BlueLaptopPrice = 30000
@@ -27,26 +29,29 @@ Config.minVaultBags = 5
 Config.maxVaultBags = 10
 
 -- Values of Money Bags
-Config.minFleecaBagsWorth = 2500
-Config.maxFleecaBagsWorth = 5000
-Config.minPaletoBagsWorth = 4000
-Config.maxPaletoBagsWorth = 6500
-Config.minPacificBagsWorth = 5500
-Config.maxPacificBagsWorth = 8000
-Config.minVaultBagsWorth = 7000
-Config.maxVaultBagsWorth = 10000
+Config.minFleecaBagsWorth = 5000
+Config.maxFleecaBagsWorth = 7500
+Config.minPaletoBagsWorth = 5000
+Config.maxPaletoBagsWorth = 10000
+Config.minPacificBagsWorth = 7500
+Config.maxPacificBagsWorth = 15000
+Config.minVaultBagsWorth = 7500
+Config.maxVaultBagsWorth = 20000
 
+-- Bank Cooldown
 Config.SmallBankTimer = 30
 Config.BigBankTimer = 60
 
+-- Door Locks
 Config.PaletoDoor1 = 85
 Config.PaletoDoor2 = 86
-Config.PacificDoor1 = 1
-Config.PacificDoor2 = 2
-Config.PacificDoor3 = 3
-Config.PacificDoor4 = 4
+Config.PacificDoor1 = 75
+Config.PacificDoor2 = 76
+Config.PacificDoor3 = 78
+Config.PacificDoor4 = 79
 
-Config.HitsNeeded = 13 -- The amount of powerstation needed to be hit to cause a blackout
+-- Powerplant hits for blackout
+Config.HitsNeeded = 13
 
 -- Thermite Minigame Settings
 Config.ThermiteBlocks = 18
@@ -60,9 +65,9 @@ Config.FleecaBlocks = 4
 Config.FleecaRepeat = 3
 
 -- Paleto Laptop Config
-Config.PaletoTime = 17
-Config.PaletoBlocks = 3
-Config.PaletoRepeat = 1
+Config.PaletoTime = 7
+Config.PaletoBlocks = 5
+Config.PaletoRepeat = 4
 
 -- Pacific Laptop Config
 Config.PacificTime = 8
@@ -582,65 +587,92 @@ Config.BigBanks = {
         ["thermite"] = {
             [1] = {
                 ["coords"] = vector3(252.55, 221.15, 101.68),
+                ["heading"] = 160.0,
                 ["isOpened"] = false,
-                ["doorId"] = 2
             },
             [2] = {
                 ["coords"] = vector3(261.15, 215.21, 101.68),
+                ["heading"] = 250.0,
                 ["isOpened"] = false,
-                ["doorId"] = 3
+            },
+            [3] = {
+                ["coords"] = vector3(257.2764, 220.2341, 106.28),
+                ["heading"] = 335.0,
+                ["isOpened"] = false,
             }
         },
         ["camId"] = 26,
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(258.57, 218.36, 101.68),
+                ["coords"] = vector3(258.1886, 218.5870, 101.68),
+                ["heading"] = 340.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(260.82, 217.62, 101.68),
+                ["coords"] = vector3(259.4572, 218.0901, 101.68),
+                ["heading"] = 340.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(259.33, 213.76, 101.68),
+                ["coords"] = vector3(261.0686, 217.5370, 101.68),
+                ["heading"] = 340.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(257.09, 214.55, 101.68),
+                ["coords"] = vector3(256.6934, 214.6796, 101.68),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(263.7, 216.48, 101.68),
+                ["coords"] = vector3(258.2743, 214.1041, 101.68),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(265.81, 215.81, 101.68),
+                ["coords"] = vector3(259.7899, 213.6278, 101.68),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [7] = {
-                ["coords"] = vector3(266.43, 214.37, 101.68),
+                ["coords"] = vector3(262.1701, 212.7137, 101.68),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [8] = {
-                ["coords"] = vector3(265.71, 212.49, 101.68),
+                ["coords"] = vector3(264.2391, 211.9872, 101.68),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [9] = {
-                ["coords"] = vector3(264.24, 211.92, 101.68),
+                ["coords"] = vector3(265.7456, 212.5312, 101.68),
+                ["heading"] = 337.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [10] = {
-                ["coords"] = vector3(262.21, 212.67, 101.68),
+                ["coords"] = vector3(266.2950, 214.2723, 101.68),
+                ["heading"] = 245.0,
+                ["isBusy"] = false,
+                ["isOpened"] = false
+            },
+            [11] = {
+                ["coords"] = vector3(265.7250, 215.7426, 101.68),
+                ["heading"] = 340.0,
+                ["isBusy"] = false,
+                ["isOpened"] = false
+            },
+            [12] = {
+                ["coords"] = vector3(263.7043, 216.5233, 101.68),
+                ["heading"] = 340.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             }

@@ -489,13 +489,6 @@ QBCore.Functions.CreateUseableItem("security_card_03", function(source, item)
     end
 end)
 
-QBCore.Functions.CreateUseableItem("electronickit", function(source, item)
-    local Player = QBCore.Functions.GetPlayer(source)
-    if Player.Functions.GetItemByName('electronickit') ~= nil then
-        TriggerClientEvent("electronickit:UseElectronickit", source)
-    end
-end)
-
 -- Practice
 QBCore.Functions.CreateUseableItem('laptop_pink', function(source, item)
     local Player = QBCore.Functions.GetPlayer(source)
