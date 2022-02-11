@@ -66,6 +66,8 @@ RegisterNetEvent('thermite:UseThermite', function()
                             AddExplosion(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z, 0, 1.0, true, false, 4.0)
                             ]]
                             QBCore.Functions.Notify('You suck!', 'error', '5000')
+                            TriggerServerEvent('QBCore:Server:RemoveItem', 'thermite', 1)
+                            TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["thermite"], 'remove')
                         end)
                     else 
                         QBCore.Functions.Notify('Fuse blown already', 'error', '3500')
