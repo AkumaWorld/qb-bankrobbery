@@ -57,58 +57,64 @@ Config.LockerRewardsPacific = {
 
 Config.PowerStations = {
     [1] = {
-        coords = vector3(2835.24, 1505.68, 24.72),
+        coords = vector4(2835.24, 1505.68, 24.72, 160.0),
         hit = false
     },
     [2] = {
-        coords = vector3(2811.76, 1500.6, 24.72),
+        coords = vector4(2811.76, 1500.6, 24.72, 338.8),
         hit = false
     },
     [3] = {
-        coords = vector3(2137.73, 1949.62, 93.78),
+        coords = vector4(2137.73, 1949.62, 93.78, 176.0),
         hit = false
     },
     [4] = {
-        coords = vector3(708.92, 117.49, 80.95),
+        coords = vector4(708.92, 117.49, 80.95, 152.5),
         hit = false
     },
     [5] = {
-        coords = vector3(670.23, 128.14, 80.95),
+        coords = vector4(670.23, 128.14, 80.95, 340.0),
         hit = false
     },
     [6] = {
-        coords = vector3(692.17, 160.28, 80.94),
+        coords = vector4(692.17, 160.28, 80.94, 162.0),
         hit = false
     },
     [7] = {
-        coords = vector3(2459.16, 1460.94, 36.2),
+        coords = vector4(2459.16, 1460.94, 36.2, 3.5),
         hit = false
     },
     [8] = {
-        coords = vector3(2280.45, 2964.83, 46.75),
+        coords = vector4(2280.45, 2964.83, 46.75, 267.0),
         hit = false
     },
     [9] = {
-        coords = vector3(2059.68, 3683.8, 34.58),
+        coords = vector4(2059.68, 3683.8, 34.58, 303.0),
         hit = false
     },
     [10] = {
-        coords = vector3(2589.5, 5057.38, 44.91),
+        coords = vector4(2589.5, 5057.38, 44.91, 17.0),
         hit = false
     },
     [11] = {
-        coords = vector3(1343.61, 6388.13, 33.4),
+        coords = vector4(1343.61, 6388.13, 33.4, 90.0),
         hit = false
     },
     [12] = {
-        coords = vector3(236.61, 6406.1, 31.83),
+        coords = vector4(236.61, 6406.1, 31.83, 115.0),
         hit = false
     },
     [13] = {
-        coords = vector3(-293.1, 6023.54, 31.54),
+        coords = vector4(-293.1, 6023.54, 31.54, 135.0),
         hit = false
     }
 }
+
+-- Thermite Minigame Setting for Power Stations
+Config.PowerStationsBlocks = 18
+Config.PowerStationsAttempts = 3
+Config.PowerStationsShow = 5
+Config.PowerStationsTime = 45
 
 Config.SmallBanks = {
     [1] = {

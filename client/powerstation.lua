@@ -1,225 +1,106 @@
-local closestStation = 0
-local currentStation = 0
-local currentFires = {}
-local currentGate = 0
-local requiredItemsShowed = false
-local requiredItems = {}
-
 -- Functions
-
-local function CreateFire(coords, time)
-    for i = 1, math.random(1, 7), 1 do
-        TriggerServerEvent("thermite:StartServerFire", coords, 24, false)
-    end
-    Wait(time)
-    TriggerServerEvent("thermite:StopFires")
-end
-
-local function loadAnimDict(dict)
-    while not HasAnimDictLoaded(dict) do
-        RequestAnimDict(dict)
+function thermiteAnimation(k)
+    RequestAnimDict('anim@heists@ornate_bank@thermal_charge')
+    RequestModel('hei_p_m_bag_var22_arm_s')
+    RequestNamedPtfxAsset('scr_ornate_heist')
+    while not HasAnimDictLoaded('anim@heists@ornate_bank@thermal_charge') and not HasModelLoaded('hei_p_m_bag_var22_arm_s') and not HasNamedPtfxAssetLoaded('scr_ornate_heist') do
         Wait(50)
     end
+    local ped = PlayerPedId()
+
+    SetEntityHeading(ped, Config.PowerStations[k]['coords'].w)
+    Wait(100)
+    local rotx, roty, rotz = table.unpack(vec3(GetEntityRotation(PlayerPedId())))
+    local scene1 = NetworkCreateSynchronisedScene(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z, rotx, roty, rotz + 1.1, 2, false, false, 1065353216, 0, 1.3)
+    local bag = CreateObject(GetHashKey('hei_p_m_bag_var22_arm_s'), Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z,  true,  true, false)
+
+    SetEntityCollision(bag, false, true)
+    NetworkAddPedToSynchronisedScene(ped, scene1, 'anim@heists@ornate_bank@thermal_charge', 'thermal_charge', 1.2, -4.0, 1, 16, 1148846080, 0)
+    NetworkAddEntityToSynchronisedScene(bag, scene1, 'anim@heists@ornate_bank@thermal_charge', 'bag_thermal_charge', 4.0, -8.0, 1)
+    NetworkStartSynchronisedScene(scene1)
+    Wait(1500)
+    local x, y, z = table.unpack(GetEntityCoords(ped))
+    local thermiteObj = CreateObject(GetHashKey('hei_prop_heist_thermite'), x, y, z + 0.3,  true,  true, true)
+
+    SetEntityCollision(thermiteObj, false, true)
+    AttachEntityToEntity(thermiteObj, ped, GetPedBoneIndex(ped, 28422), 0, 0, 0, 0, 0, 200.0, true, true, false, true, 1, true)
+    Wait(2000)
+    DeleteObject(bag)
+    DetachEntity(thermiteObj, 1, 1)
+    FreezeEntityPosition(thermiteObj, true)
+
+    TriggerServerEvent('QBCore:Server:RemoveItem', 'thermite', 1)
+    TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items, 'remove')
+
+    NetworkStopSynchronisedScene(scene1)
+    ClearPedTasks(ped)
+    QBCore.Functions.Notify('Burning in 10...', 'primary') 
+    Wait(10000)
+    DeleteObject(thermiteObj)
+    AddExplosion(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z, 0, 1.0, true, false, 4.0)
+    QBCore.Functions.Notify("The fuses are broken", "success")
+    TriggerServerEvent("qb-bankrobbery:server:SetStationStatus", k, true)
 end
 
 -- Events
 
-RegisterNetEvent('police:SetCopCount', function(amount)
-    CurrentCops = amount
-end)
-
-RegisterNetEvent('thermite:StartFire', function(coords, maxChildren, isGasFire)
-    if #(vector3(coords.x, coords.y, coords.z) - GetEntityCoords(PlayerPedId())) < 100 then
-        local pos = {
-            x = coords.x,
-            y = coords.y,
-            z = coords.z,
-        }
-        pos.z = pos.z - 0.9
-        local fire = StartScriptFire(pos.x, pos.y, pos.z, maxChildren, isGasFire)
-        currentFires[#currentFires+1] = fire
-    end
-end)
-
-RegisterNetEvent('thermite:StopFires', function()
-    for k, v in ipairs(currentFires) do
-        RemoveScriptFire(v)
-    end
-end)
-
 RegisterNetEvent('thermite:UseThermite', function()
-    local ped = PlayerPedId()
-    local pos = GetEntityCoords(ped)
-    if closestStation ~= 0 then
-        if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
-            TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
-        end
-        local dist = #(pos - Config.PowerStations[closestStation].coords)
-        if dist < 1.5 then
-            if CurrentCops >= Config.MinimumThermitePolice then
-                if not Config.PowerStations[closestStation].hit then
-                    loadAnimDict("weapon@w_sp_jerrycan")
-                    TaskPlayAnim(PlayerPedId(), "weapon@w_sp_jerrycan", "fire", 3.0, 3.9, 180, 49, 0, 0, 0, 0)
-                    TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-                    SetNuiFocus(true, true)
-                    SendNUIMessage({
-                        action = "openThermite",
-                        amount = math.random(5, 10),
-                    })
-                    currentStation = closestStation
-                else
-                    QBCore.Functions.Notify("It seems that the fuses have blown.", "error")
+    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
+        if result then
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            for k,v in pairs(Config.PowerStations) do
+                local Dist = #(pos - vector3(v['coords'].x, v['coords'].y, v['coords'].z))
+                if Dist <= 1.5 then
+                    if not v['hit'] then
+                        -- Minigame
+                        exports["memorygame"]:thermiteminigame(Config.PowerStationsBlocks, Config.PowerStationsAttempts, Config.PowerStationsShow, Config.PowerStationsTime,
+                        function()
+                            -- SUCCESS
+                            thermiteAnimation(k)
+                        end,
+                        function()
+                            -- FAIL
+                            --[[
+                            -- Blow them up?
+                            AddExplosion(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z, 0, 1.0, true, false, 4.0)
+                            ]]
+                            QBCore.Functions.Notify('You suck!', 'error', '5000')
+                        end)
+                    else 
+                        QBCore.Functions.Notify('Fuse blown already', 'error', '3500')
+                    end
                 end
-            else
-                QBCore.Functions.Notify('Minimum Of '..Config.MinimumThermitePolice..' Police Needed', "error")
             end
-        end
-    elseif currentThermiteGate ~= 0 then
-        if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
-            TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
-        end
-        if CurrentCops >= Config.MinimumThermitePolice then
-            currentGate = currentThermiteGate
-            loadAnimDict("weapon@w_sp_jerrycan")
-            TaskPlayAnim(PlayerPedId(), "weapon@w_sp_jerrycan", "fire", 3.0, 3.9, -1, 49, 0, 0, 0, 0)
-            TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-            SetNuiFocus(true, true)
-            SendNUIMessage({
-                action = "openThermite",
-                amount = math.random(5, 10),
-            })
         else
-            QBCore.Functions.Notify('Minimum Of '..Config.MinimumThermitePolice..' Police Needed', "error")
+            QBCore.Functions.Notify('You appear to be missing something...', 'error')
         end
-    end
+    end, 'thermite')
 end)
 
 RegisterNetEvent('qb-bankrobbery:client:SetStationStatus', function(key, isHit)
     Config.PowerStations[key].hit = isHit
 end)
 
--- NUI Callbacks
-
-RegisterNUICallback('thermiteclick', function()
-    PlaySound(-1, "CLICK_BACK", "WEB_NAVIGATION_SOUNDS_PHONE", 0, 0, 1)
-end)
-
-RegisterNUICallback('thermitefailed', function()
-    QBCore.Functions.TriggerCallback("thermite:server:check", function(success)
-        if success then
-            PlaySound(-1, "Place_Prop_Fail", "DLC_Dmod_Prop_Editor_Sounds", 0, 0, 1)
-            ClearPedTasks(PlayerPedId())
-            local coords = GetEntityCoords(PlayerPedId())
-            local randTime = math.random(10000, 15000)
-            CreateFire(coords, randTime)
-        end
-    end)
-end)
-
-RegisterNUICallback('thermitesuccess', function()
-    QBCore.Functions.TriggerCallback("thermite:server:check", function(success)
-        if success then
-            ClearPedTasks(PlayerPedId())
-            local time = 3
-            local coords = GetEntityCoords(PlayerPedId())
-            while time > 0 do
-                QBCore.Functions.Notify("Thermite is going off in " .. time .. "..")
-                Wait(1000)
-                time = time - 1
-            end
-            local randTime = math.random(10000, 15000)
-            CreateFire(coords, randTime)
-            if currentStation ~= 0 then
-                QBCore.Functions.Notify("The fuses are broken", "success")
-                TriggerServerEvent("qb-bankrobbery:server:SetStationStatus", currentStation, true)
-            elseif currentGate ~= 0 then
-                QBCore.Functions.Notify("The door is open", "success")
-                TriggerServerEvent('qb-doorlock:server:updateState', currentGate, false)
-                currentGate = 0
-            end
-        end
-    end)
-end)
-
-RegisterNUICallback('closethermite', function()
-    SetNuiFocus(false, false)
-end)
-
 -- Threads
-
-CreateThread(function()
-    while true do
-        local ped = PlayerPedId()
-        local pos = GetEntityCoords(ped)
-        local dist
-        if QBCore ~= nil then
-            local inRange = false
-            for k, v in pairs(Config.PowerStations) do
-                dist = #(pos - Config.PowerStations[k].coords)
-                if dist < 5 then
-                    closestStation = k
-                    inRange = true
-                end
-            end
-            if not inRange then
-                Wait(1000)
-                closestStation = 0
-            end
-        end
-        Wait(3)
-    end
-end)
-
-CreateThread(function()
-    while true do
-        local ped = PlayerPedId()
-        local pos = GetEntityCoords(ped)
-        local dist
-        if QBCore ~= nil then
-            local inRange = false
-            for k, v in pairs(Config.PowerStations) do
-                dist = #(pos - Config.PowerStations[k].coords)
-                if dist < 5 then
-                    closestStation = k
-                    inRange = true
-                end
-            end
-            if not inRange then
-                Wait(1000)
-                closestStation = 0
-            end
-        end
-        Wait(3)
-    end
-end)
-
-CreateThread(function()
-    Wait(2000)
-    requiredItems = {[1] = {name = QBCore.Shared.Items["thermite"]["name"], image = QBCore.Shared.Items["thermite"]["image"]}}
-    while true do
-        local ped = PlayerPedId()
-        local pos = GetEntityCoords(ped)
-        if QBCore ~= nil then
-            if closestStation ~= 0 then
-                if not Config.PowerStations[closestStation].hit then
-                    DrawMarker(2, Config.PowerStations[closestStation].coords.x, Config.PowerStations[closestStation].coords.y, Config.PowerStations[closestStation].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.25, 0.1, 255, 255, 255, 155, 0, 0, 0, 1, 0, 0, 0)
-                    local dist = #(pos - Config.PowerStations[closestStation].coords)
-                    if dist < 1 then
-                        if not requiredItemsShowed then
-                            requiredItemsShowed = true
-                            TriggerEvent('inventory:client:requiredItems', requiredItems, true)
-                        end
-                    else
-                        if requiredItemsShowed then
-                            requiredItemsShowed = false
-                            TriggerEvent('inventory:client:requiredItems', requiredItems, false)
-                        end
-                    end
-                end
-            else
-                Wait(1500)
-            end
-        end
-        Wait(1)
+CreateThread(function() 
+    for k,v in pairs(Config.PowerStations) do
+      exports['qb-target']:AddBoxZone('PowerStation'..math.random(1,20), vector3(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z), 1.5, 1.5, {
+          name = 'PowerStation'..math.random(1,20), 
+          heading = Config.PowerStations[k]['coords'].w,
+          debugPoly = true,
+          minZ = Config.PowerStations[k]['coords'].z-1,
+          maxZ = Config.PowerStations[k]['coords'].z+2,
+          }, {
+          options = {
+          { 
+              type = 'client',
+              event = 'thermite:UseThermite',
+              icon = 'fas fa-bomb',
+              label = 'Blow Up',
+          }
+          },
+          distance = 1.5,
+      })
     end
 end)
