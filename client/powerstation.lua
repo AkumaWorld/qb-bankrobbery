@@ -30,11 +30,11 @@ function thermiteAnimation(k)
     FreezeEntityPosition(thermiteObj, true)
 
     TriggerServerEvent('QBCore:Server:RemoveItem', 'thermite', 1)
-    TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items, 'remove')
+    TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["thermite"], 'remove')
 
     NetworkStopSynchronisedScene(scene1)
     ClearPedTasks(ped)
-    QBCore.Functions.Notify('Burning in 10...', 'primary') 
+    QBCore.Functions.Notify('Blowing up in 10...', 'primary') 
     Wait(10000)
     DeleteObject(thermiteObj)
     AddExplosion(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z, 0, 1.0, true, false, 4.0)
