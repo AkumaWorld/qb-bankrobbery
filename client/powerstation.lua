@@ -54,7 +54,7 @@ RegisterNetEvent('thermite:UseThermite', function()
                 if Dist <= 1.5 then
                     if not v['hit'] then
                         -- Minigame
-                        exports["memorygame"]:thermiteminigame(Config.PowerStationsBlocks, Config.PowerStationsAttempts, Config.PowerStationsShow, Config.PowerStationsTime,
+                        exports["memorygame"]:thermiteminigame(Config.ThermiteBlocks, Config.ThermiteAttempts, Config.ThermiteShow, Config.ThermiteTime,
                         function()
                             -- SUCCESS
                             thermiteAnimation(k)
@@ -90,7 +90,7 @@ CreateThread(function()
       exports['qb-target']:AddBoxZone('PowerStation'..math.random(1,20), vector3(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z), 1.5, 1.5, {
           name = 'PowerStation'..math.random(1,20), 
           heading = Config.PowerStations[k]['coords'].w,
-          debugPoly = false,
+          debugPoly = Config.DebugPoly,
           minZ = Config.PowerStations[k]['coords'].z-1,
           maxZ = Config.PowerStations[k]['coords'].z+2,
           }, {

@@ -1,15 +1,43 @@
 Config = Config or {}
 
+Config.DebugPoly = false
+
 Config.ItemTiers = 1
 
-Config.MinimumVaultPolice = 6 -- K4MBI MAP
-Config.MinimumPacificPolice = 5
-Config.MinimumPaletoPolice = 4
-Config.MinimumFleecaPolice = 3
-Config.MinimumThermitePolice = 2
+Config.MinimumThermitePolice = 0
+Config.MinimumFleecaPolice = 0
+Config.MinimumPaletoPolice = 0
+Config.MinimumPacificPolice = 0
+Config.MinimumVaultPolice = 0 -- K4MBI MAP
 
-Config.BigBankTimer = 60
+Config.PinkLaptopPrice = 10000
+Config.GreenLaptopPrice = 20000
+Config.BlueLaptopPrice = 30000
+Config.RedLaptopPrice = 40000
+Config.GoldLaptopPrice = 50000
+
+-- Amount of money bags recieved
+Config.minFleecaBags = 2
+Config.maxFleecaBags = 5
+Config.minPaletoBags = 3
+Config.maxPaletoBags = 6
+Config.minPacificBags = 4
+Config.maxPacificBags = 8
+Config.minVaultBags = 5
+Config.maxVaultBags = 10
+
+-- Values of Money Bags
+Config.minFleecaBagsWorth = 2500
+Config.maxFleecaBagsWorth = 5000
+Config.minPaletoBagsWorth = 4000
+Config.maxPaletoBagsWorth = 6500
+Config.minPacificBagsWorth = 5500
+Config.maxPacificBagsWorth = 8000
+Config.minVaultBagsWorth = 7000
+Config.maxVaultBagsWorth = 10000
+
 Config.SmallBankTimer = 30
+Config.BigBankTimer = 60
 
 Config.HitsNeeded = 13 -- The amount of powerstation needed to be hit to cause a blackout
 
@@ -19,16 +47,39 @@ Config.RewardTypes = {
     },
     [2] = {
         type = "money",
-        minFleecaAmount = 2,
-        maxFleecaAmount = 5,
-        minPaletoAmount = 3,
-        maxPaletoAmount = 6,
-        minPacificAmount = 4,
-        maxPacificAmount = 8,
-        minVaultAmount = 5,
-        maxVaultAmount = 10
     }
 }
+
+-- Thermite Minigame Settings
+Config.ThermiteBlocks = 18
+Config.ThermiteAttempts = 3
+Config.ThermiteShow = 5
+Config.ThermiteTime = 45
+
+-- Fleeca Laptop Config
+Config.FleecaTime = 6
+Config.FleecaBlocks = 4
+Config.FleecaRepeat = 3
+
+-- Paleto Laptop Config
+Config.PaletoTime = 7
+Config.PaletoBlocks = 5
+Config.PaletoRepeat = 4
+
+-- Pacific Laptop Config
+Config.PacificTime = 8
+Config.PacificBlocks = 6
+Config.PacificRepeat = 4
+
+-- Lower Vault Laptop Config [Computer]
+Config.VaultTime = 8
+Config.VaultBlocks = 6
+Config.VaultRepeat = 5
+
+-- Lower Vault Laptop Config [Back Door]
+Config.VaultBackTime = 8
+Config.VaultBackBlocks = 6
+Config.VaultBackRepeat = 5
 
 Config.LockerRewards = {
     ["tier1"] = {
@@ -133,70 +184,73 @@ Config.PowerStations = {
     }
 }
 
--- Thermite Minigame Setting for Power Stations
-Config.PowerStationsBlocks = 18
-Config.PowerStationsAttempts = 3
-Config.PowerStationsShow = 5
-Config.PowerStationsTime = 45
-
 Config.SmallBanks = {
     [1] = {
-        ["label"] = "Lol",
-        ["coords"] = vector3(311.15, -284.49, 54.16),
+        ["label"] = "Pink Cage Motel",
+        ["coords"] = vector4(311.57, -284.0903, 53.974, 259.00),
         ["alarm"] = true,
         ["object"] = `v_ilev_gb_vauldr`,
         ["heading"] = {
             closed = 250.0,
             open = 160.0
         },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(315.230, -284.93, 53.1430),
+                heading = 70.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(313.480, -283.25, 53.1430),
+                heading = 160.0,
+                grabbed = false
+            },
+        },
         ["camId"] = 21,
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(311.16, -287.71, 54.14),
+                ["coords"] = vector3(315.2048, -287.468, 54.143),
+                ["heading"] = 246.70,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(311.86, -286.21, 54.14),
+                ["coords"] = vector3(314.6565, -288.885, 54.143),
+                ["heading"] = 246.70,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(313.39, -289.15, 54.14),
+                ["coords"] = vector3(313.1488, -289.375, 54.143),
+                ["heading"] = 156.90,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(311.7, -288.45, 54.14),
+                ["coords"] = vector3(311.7352, -288.875, 54.143),
+                ["heading"] = 156.90,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(314.23, -288.77, 54.14),
+                ["coords"] = vector3(310.9144, -287.467, 54.143),
+                ["heading"] = 66.70,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(314.83, -287.33, 54.14),
+                ["coords"] = vector3(311.4365, -286.277, 54.143),
+                ["heading"] = 66.70,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(315.24, -284.85, 54.14),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(314.08, -283.38, 54.14),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     },
     [2] = {
         ["label"] = "Legion Square",
-        ["coords"] = vector3(146.92, -1046.11, 29.36),
+        ["coords"] = vector4(148.1218, -1046.60, 30.000, 250.7),
         ["alarm"] = true,
         ["object"] = `v_ilev_gb_vauldr`,
         ["heading"] = {
@@ -207,50 +261,46 @@ Config.SmallBanks = {
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(149.84, -1044.9, 29.34),
+                ["coords"] = vector3(150.5759, -1049.07, 29.346),
+                ["heading"] = 250.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(151.16, -1046.64, 29.34),
+                ["coords"] = vector3(150.0989, -1050.43, 29.346),
+                ["heading"] = 250.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(147.16, -1047.72, 29.34),
+                ["coords"] = vector3(149.0469, -1051.08, 29.346),
+                ["heading"] = 155.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(146.54, -1049.28, 29.34),
+                ["coords"] = vector3(147.3068, -1050.42, 29.346),
+                ["heading"] = 155.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(146.88, -1050.33, 29.34),
+                ["coords"] = vector3(146.5203, -1049.30, 29.346),
+                ["heading"] = 70.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(150.0, -1050.67, 29.34),
+                ["coords"] = vector3(147.0513, -1047.85, 29.346),
+                ["heading"] = 70.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(149.47, -1051.28, 29.34),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(150.58, -1049.09, 29.34),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     },
     [3] = {
         ["label"] = "Hawick Ave",
-        ["coords"] = vector3(-353.82, -55.37, 49.03),
+        ["coords"] = vector4(-354.00, -55.30, 49.85, 257.45),
         ["alarm"] = true,
         ["object"] = `v_ilev_gb_vauldr`,
         ["heading"] = {
@@ -261,50 +311,46 @@ Config.SmallBanks = {
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(350.99, -54.13, 49.01),
+                ["coords"] = vector3(-349.795, -58.2366, 49.014),
+                ["heading"] = 250.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(-349.53, -55.77, 49.01),
+                ["coords"] = vector3(-350.292, -59.6852, 49.014),
+                ["heading"] = 250.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(-353.54, -56.94, 49.01),
+                ["coords"] = vector3(-351.550, -60.3088, 49.014),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(-354.09, -58.55, 49.01),
+                ["coords"] = vector3(-353.348, -59.6940, 49.014),
+                ["heading"] = 160.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(-353.81, -59.48, 49.01),
+                ["coords"] = vector3(-354.147, -58.5504, 49.014),
+                ["heading"] = 70.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(-349.8, -58.3, 49.01),
+                ["coords"] = vector3(-353.656, -57.0587, 49.014),
+                ["heading"] = 70.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(-351.14, -60.37, 49.01),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(-350.4, -59.92, 49.01),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     },
     [4] = {
         ["label"] = "Del Perro Blvd",
-        ["coords"] = vector3(-1210.77, -336.57, 37.78),
+        ["coords"] = vector4(-1210.150, -336.350, 37.380, 299.500),
         ["alarm"] = true,
         ["object"] = `v_ilev_gb_vauldr`,
         ["heading"] = {
@@ -315,50 +361,47 @@ Config.SmallBanks = {
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(-1209.68, -333.65, 37.75),
+                ["coords"] = vector3(-1205.84, -335.683, 37.759),
+                ["heading"] = 290.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(-1207.46, -333.77, 37.75),
+                ["coords"] = vector3(-1205.17, -337.042, 37.759),
+                ["heading"] = 290.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(-1209.45, -337.47, 37.75),
+                ["coords"] = vector3(-1205.56, -338.343, 37.759),
+                ["heading"] = 205.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(-1208.65, -339.06, 37.75),
+                ["coords"] = vector3(-1207.37, -339.294, 37.759),
+                ["heading"] = 205.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(-1207.75, -339.42, 37.75),
+                ["coords"] = vector3(-1208.64, -338.993, 37.759),
+                ["heading"] = 115.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(-1205.28, -338.14, 37.75),
+                ["coords"] = vector3(-1209.32, -337.726, 37.759),
+                ["heading"] = 115.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(-1205.08, -337.28, 37.75),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(-1205.92, -335.75, 37.75),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     },
     [5] = {
         ["label"] = "Great Ocean Hwy",
-        ["coords"] = vector3(-2956.55, 481.74, 15.69),
+        -- -2956.564, 481.957, 15.297
+        ["coords"] = vector4(-2956.500, 482.075, 15.300, 347.00),
         ["alarm"] = true,
         ["object"] = `hei_prop_heist_sec_door`,
         ["heading"] = {
@@ -369,50 +412,46 @@ Config.SmallBanks = {
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(-2958.54, 484.1, 15.67),
+                ["coords"] = vector3(-2954.89, 486.4198, 15.675),
+                ["heading"] = 355.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(-2957.3, 485.95, 15.67),
+                ["coords"] = vector3(-2953.42, 486.3435, 15.675),
+                ["heading"] = 355.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(-2955.09, 482.43, 15.67),
+                ["coords"] = vector3(-2952.43, 485.4940, 15.675),
+                ["heading"] = 265.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(-2953.26, 482.42, 15.67),
+                ["coords"] = vector3(-2952.58, 483.4612, 15.675),
+                ["heading"] = 265.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(-2952.63, 483.09, 15.67),
+                ["coords"] = vector3(-2953.44, 482.3929, 15.675),
+                ["heading"] = 180.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(-2952.45, 485.66, 15.67),
+                ["coords"] = vector3(-2954.90, 482.4014, 15.675),
+                ["heading"] = 180.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(-2953.13, 486.26, 15.67),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(-2954.98, 486.37, 15.67),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     },
     [6] = {
-        ["label"] = "East",
-        ["coords"] = vector3(1175.96, 2712.87, 38.09),
+        ["label"] = "Sandy Shores",
+        ["coords"] = vector4(1175.350, 2712.900, 39.350, 84.600),
         ["alarm"] = true,
         ["object"] = `v_ilev_gb_vauldr`,
         ["heading"] = {
@@ -423,45 +462,41 @@ Config.SmallBanks = {
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(1173.69, 2710.76, 38.07),
+                ["coords"] = vector3(1171.216, 2714.311, 38.066),
+                ["heading"] = 90.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(1171.78, 2711.94, 38.07),
+                ["coords"] = vector3(1171.214, 2715.894, 38.066),
+                ["heading"] = 90.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(1175.25, 2714.51, 38.07),
+                ["coords"] = vector3(1172.274, 2716.826, 38.066),
+                ["heading"] = 360.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(1175.26, 2715.97, 38.07),
+                ["coords"] = vector3(1174.206, 2716.818, 38.066),
+                ["heading"] = 360.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(1174.27, 2716.83, 38.07),
+                ["coords"] = vector3(1175.264, 2715.944, 38.066),
+                ["heading"] = 270.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(1172.32, 2716.82, 38.07),
+                ["coords"] = vector3(1175.247, 2714.510, 38.066),
+                ["heading"] = 270.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(1171.25, 2716.08, 38.07),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(1171.23, 2714.44, 38.07),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     }	
 }

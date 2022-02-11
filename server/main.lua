@@ -144,9 +144,9 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
                      TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item.item], "add")
                  elseif Config.RewardTypes[itemType].type == "money" then
                     local info = {
-                        worth = math.random(2300, 3200)
+                        worth = math.random(Config.minFleecaBagsWorth, Config.maxFleecaBagsWorth)
                     }
-                    ply.Functions.AddItem('markedbills', math.random(Config.RewardTypes["money"].minFleecaAmount,Config.RewardTypes["money"].maxFleecaAmount), false, info)
+                    ply.Functions.AddItem('markedbills', math.random(Config.minFleecaBags ,Config.maxFleecaBags), false, info)
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
                 end
             else
@@ -154,8 +154,8 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
                 TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['security_card_01'], "add")
             end
         else
-            ply.Functions.AddItem('weapon_stungun', 1)
-            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weapon_stungun'], "add")
+            ply.Functions.AddItem('security_card_02', 1)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['security_card_02'], "add")
         end
     elseif type == "paleto" then
         local itemType = math.random(#Config.RewardTypes)
@@ -174,9 +174,9 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
                      TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item.item], "add")
                  elseif Config.RewardTypes[itemType].type == "money" then
                      local info = {
-                         worth = math.random(4000, 6000)
+                         worth = math.random(Config.minPaletoBagsWorth , Config.maxPaletoBagsWorth )
                      }
-                    ply.Functions.AddItem('markedbills', math.random(Config.RewardTypes["money"].minPaletoAmount,Config.RewardTypes["money"].maxPaletoAmount), false, info)
+                    ply.Functions.AddItem('markedbills', math.random(Config.minPaletoBags, Config.maxPaletoBags), false, info)
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
                  end
             else
@@ -206,18 +206,17 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
                     ply.Functions.AddItem(item.item, itemAmount)
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item.item], "add")
                 elseif Config.RewardTypes[itemType].type == "money" then
-                     local moneyAmount = math.random(1200, 7000)
                      local info = {
-                         worth = math.random(19000, 21000)
+                         worth = math.random(Config.minPacificBagsWorth, Config.maxPacificBagsWorth)
                      }
-                    ply.Functions.AddItem('markedbills', math.random(Config.RewardTypes["money"].minPacificAmount,Config.RewardTypes["money"].maxPacificAmount), false, info)
+                    ply.Functions.AddItem('markedbills', math.random(Config.minPacificBags, Config.maxPacificBags), false, info)
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
                 end
             else
                  local info = {
-                     worth = math.random(19000, 21000)
+                     worth = math.random(Config.minPacificBagsWorth, Config.maxPacificBagsWorth)
                  }
-                ply.Functions.AddItem('markedbills', math.random(Config.RewardTypes["money"].minPacificAmount,Config.RewardTypes["money"].maxPacificAmount), false, info)
+                ply.Functions.AddItem('markedbills', math.random(Config.minPacificBags, Config.maxPacificBags), false, info)
                 TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
                  local info = {
                      crypto = math.random(1, 3)
@@ -229,11 +228,11 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
             local chance = math.random(1, 2)
             local odd = math.random(1, 2)
             if chance == odd then
-                ply.Functions.AddItem('weapon_microsmg', 1)
-                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weapon_microsmg'], "add")
+                ply.Functions.AddItem('security_card_03', 1)
+                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['security_card_03'], "add")
             else
-                ply.Functions.AddItem('weapon_minismg', 1)
-                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weapon_minismg'], "add")
+                ply.Functions.AddItem('security_card_03', 2)
+                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['security_card_03'], "add")
             end
 
         end
@@ -256,18 +255,17 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
                     ply.Functions.AddItem(item.item, itemAmount)
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item.item], "add")
                 elseif Config.RewardTypes[itemType].type == "money" then
-                     local moneyAmount = math.random(1200, 7000)
                      local info = {
-                         worth = math.random(19000, 21000)
+                         worth = math.random(Config.minVaultBagsWorth, Config.maxVaultBagsWorth)
                      }
-                    ply.Functions.AddItem('markedbills', math.random(Config.RewardTypes["money"].minVaultAmount,Config.RewardTypes["money"].maxVaultAmount), false, info)
+                    ply.Functions.AddItem('markedbills', math.random(Config.minVaultBags,Config.maxVaultBags), false, info)
                     TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
                 end
             else
                  local info = {
-                     worth = math.random(19000, 21000)
+                     worth = math.random(Config.minVaultBagsWorth, Config.maxVaultBagsWorth)
                  }
-                ply.Functions.AddItem('markedbills', math.random(Config.RewardTypes["money"].minVaultAmount,Config.RewardTypes["money"].maxVaultAmount), false, info)
+                ply.Functions.AddItem('markedbills', math.random(Config.minVaultBags,Config.maxVaultBags), false, info)
                 TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['markedbills'], "add")
                  local info = {
                      crypto = math.random(1, 3)
@@ -279,11 +277,11 @@ RegisterNetEvent('qb-bankrobbery:server:recieveItem', function(type)
             local chance = math.random(1, 2)
             local odd = math.random(1, 2)
             if chance == odd then
-                ply.Functions.AddItem('weapon_microsmg', 1)
-                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weapon_microsmg'], "add")
+                ply.Functions.AddItem('goldbar', math.random(1, 2))
+                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['goldbar'], "add")
             else
-                ply.Functions.AddItem('weapon_minismg', 1)
-                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['weapon_minismg'], "add")
+                ply.Functions.AddItem('goldbar', math.random(2, 4))
+                TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['goldbar'], "add")
             end
 
         end
@@ -355,6 +353,104 @@ RegisterNetEvent('qb-bankrobbery:server:SetStationStatus', function(key, isHit)
     end
 end)
 
+RegisterServerEvent('qb-bankrobbery:server:RemoveLaptopUse', function(itemData)
+    local Player = QBCore.Functions.GetPlayer(source)
+
+    if Player.PlayerData.items[itemData.slot].info.uses == nil then
+        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[itemData.name], 'remove')
+        Player.Functions.RemoveItem(itemData.name, 1)
+    elseif Player.PlayerData.items[itemData.slot].info.uses - 1 == 0 then
+        TriggerClientEvent('inventory:client:ItemBox', source, QBCore.Shared.Items[itemData.name], 'remove')
+        Player.Functions.RemoveItem(itemData.name, 1)
+    else
+        Player.PlayerData.items[itemData.slot].info.uses = Player.PlayerData.items[itemData.slot].info.uses - 1
+        Player.Functions.SetInventory(Player.PlayerData.items)
+    end
+end)
+
+-- Event to give heist rep can use this to disable certain laptops until a rep amount is hit.
+RegisterServerEvent('qb-bankrobbery:server:succesHeist', function(amount)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    local curRep = Player.PlayerData.metadata.heistrep
+
+	SetTimeout(math.random(1000, 2000), function()
+	--  TriggerClientEvent('QBCore:Notify', src, '+HEIST REP!', 'success')
+		Player.Functions.SetMetaData('heistrep', (curRep + amount))
+	end)
+end)
+
+-- Purchase Events for Laptops adds use amounts
+RegisterServerEvent('qb-bankrobbery:server:laptop_pink', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    info = {uses = 30}
+    if Player.PlayerData.money.cash >= Config.PinkLaptopPrice then
+        Player.Functions.RemoveMoney('cash', Config.PinkLaptopPrice)
+        Player.Functions.AddItem("laptop_pink", 1, false, info)
+        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["laptop_pink"], "add")
+        TriggerClientEvent('QBCore:Notify', src, "You purchased a laptop for "..Config.PinkLaptopPrice, "success", 3000)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "You don't have enough cash.", "error", 3000)
+    end
+end)
+
+RegisterServerEvent('qb-bankrobbery:server:laptop_green', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    info = {uses = 3}
+    if Player.PlayerData.money.cash >= Config.GreenLaptopPrice then
+        Player.Functions.RemoveMoney('cash', Config.GreenLaptopPrice)
+        Player.Functions.AddItem("laptop_green", 1, false, info)
+        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["laptop_green"], "add")
+        TriggerClientEvent('QBCore:Notify', src, "You purchased a laptop for "..Config.GreenLaptopPrice, "success", 3000)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "You don't have enough cash.", "error", 3000)
+    end
+end)
+
+RegisterServerEvent('qb-bankrobbery:server:laptop_blue', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    info = {uses = 3}
+    if Player.PlayerData.money.cash >= Config.BlueLaptopPrice then
+        Player.Functions.RemoveMoney('cash', Config.BlueLaptopPrice)
+        Player.Functions.AddItem("laptop_blue", 1, false, info)
+        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["laptop_blue"], "add")
+        TriggerClientEvent('QBCore:Notify', src, "You purchased a laptop for "..Config.BlueLaptopPrice, "success", 3000)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "You don't have enough cash.", "error", 3000)
+    end
+end)
+
+RegisterServerEvent('qb-bankrobbery:server:laptop_red', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    info = {uses = 3}
+    if Player.PlayerData.money.cash >= Config.RedLaptopPrice then
+        Player.Functions.RemoveMoney('cash', Config.RedLaptopPrice)
+        Player.Functions.AddItem("laptop_red", 1, false, info)
+        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["laptop_red"], "add")
+        TriggerClientEvent('QBCore:Notify', src, "You purchased a laptop for "..Config.RedLaptopPrice, "success", 3000)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "You don't have enough cash.", "error", 3000)
+    end
+end)
+
+RegisterServerEvent('qb-bankrobbery:server:laptop_gold', function()
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    info = {uses = 3}
+    if Player.PlayerData.money.cash >= Config.GoldLaptopPrice then
+        Player.Functions.RemoveMoney('cash', Config.GoldLaptopPrice)
+        Player.Functions.AddItem("laptop_gold", 1, false, info)
+        TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["laptop_gold"], "add")
+        TriggerClientEvent('QBCore:Notify', src, "You purchased a laptop for "..Config.GoldLaptopPrice, "success", 3000)
+    else
+        TriggerClientEvent('QBCore:Notify', src, "You don't have enough cash.", "error", 3000)
+    end
+end)
+
 -- Callbacks
 
 QBCore.Functions.CreateCallback('qb-bankrobbery:server:isRobberyActive', function(source, cb)
@@ -392,6 +488,46 @@ QBCore.Functions.CreateUseableItem("electronickit", function(source, item)
     local Player = QBCore.Functions.GetPlayer(source)
     if Player.Functions.GetItemByName('electronickit') ~= nil then
         TriggerClientEvent("electronickit:UseElectronickit", source)
+    end
+end)
+
+-- Practice
+QBCore.Functions.CreateUseableItem('laptop_pink', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.GetItemByName('laptop_pink') ~= nil then
+        TriggerClientEvent('qb-bankrobbery:client:UsePinkLaptop', source, item)
+    end
+end)
+
+-- Fleeca
+QBCore.Functions.CreateUseableItem('laptop_green', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.GetItemByName('laptop_green') ~= nil then
+        TriggerClientEvent('qb-bankrobbery:client:UseGreenLaptop', source, item)
+    end
+end)
+
+-- Paleto
+QBCore.Functions.CreateUseableItem('laptop_blue', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.GetItemByName('laptop_blue') ~= nil then
+        TriggerClientEvent('qb-bankrobbery:client:UseBlueLaptop', source, item)
+    end
+end)
+
+-- Pacific
+QBCore.Functions.CreateUseableItem('laptop_red', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.GetItemByName('laptop_red') ~= nil then
+        TriggerClientEvent('qb-bankrobbery:client:UseRedLaptop', source, item)
+    end
+end)
+
+-- Lowervault
+QBCore.Functions.CreateUseableItem('laptop_gold', function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.GetItemByName('laptop_gold') ~= nil then
+        TriggerClientEvent('qb-bankrobbery:client:UseGoldLaptop', source, item)
     end
 end)
 

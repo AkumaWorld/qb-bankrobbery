@@ -5,11 +5,7 @@ version '1.0.0'
 
 shared_script 'config.lua'
 client_scripts {
-    'client/fleeca.lua',
-    'client/pacific.lua',
-    'client/powerstation.lua',
-    'client/doors.lua',
-    'client/paleto.lua',
+    'client/*.lua',
 }
 server_script 'server/main.lua'
 
