@@ -177,10 +177,10 @@ CreateThread(function()
                     end
                 end
             end
-            if #(pos - Config.BigBanks["pacific"]["coords"][2]) < 10.0 then
+            if #(pos - vector3(Config.BigBanks["pacific"]["coords"][2].x, Config.BigBanks["pacific"]["coords"][2].y, Config.BigBanks["pacific"]["coords"][2].z)) < 10.0 then
                 inRange = true
                 if not Config.BigBanks["pacific"]["isOpened"] then
-                    local dist = #(pos - Config.BigBanks["pacific"]["coords"][2])
+                    local dist = #(pos - vector3(Config.BigBanks["pacific"]["coords"][2].x, Config.BigBanks["pacific"]["coords"][2].y, Config.BigBanks["pacific"]["coords"][2].z))
                     if dist < 1 then
                         if not requiredItemsShowed2 then
                             requiredItemsShowed2 = true

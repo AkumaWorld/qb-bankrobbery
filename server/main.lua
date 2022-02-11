@@ -451,6 +451,11 @@ RegisterServerEvent('qb-bankrobbery:server:laptop_gold', function()
     end
 end)
 
+-- Thermite Particles for Server
+RegisterServerEvent('qb-bankrobbery:server:ThermitePtfx', function(coords)
+    TriggerClientEvent('qb-bankrobbery:client:ThermitePtfx', -1, coords)
+end)
+
 -- Callbacks
 
 QBCore.Functions.CreateCallback('qb-bankrobbery:server:isRobberyActive', function(source, cb)

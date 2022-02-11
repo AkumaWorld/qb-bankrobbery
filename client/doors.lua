@@ -30,22 +30,18 @@ CreateThread(function()
         local pos = GetEntityCoords(ped)
         local inRange = true
 
-        local PaletoDist = #(pos - Config.BigBanks["paleto"]["coords"])
-        local PacificDist = #(pos - Config.BigBanks["pacific"]["coords"][2])
+        local PaletoDist = #(pos - vector3(Config.BigBanks["paleto"]["coords"].x, Config.BigBanks["paleto"]["coords"].y, Config.BigBanks["paleto"]["coords"].z))
+        local PacificDist = #(pos - vector3(Config.BigBanks["pacific"]["coords"][2].x, Config.BigBanks["pacific"]["coords"][2].y, Config.BigBanks["pacific"]["coords"][2].z))
 
         if PaletoDist < 15 then
             inRange = true
             if Config.BigBanks["paleto"]["isOpened"] then
-                TriggerServerEvent('qb-doorlock:server:updateState', 85, false)
                 local object = GetClosestObjectOfType(Config.BigBanks["paleto"]["coords"]["x"], Config.BigBanks["paleto"]["coords"]["y"], Config.BigBanks["paleto"]["coords"]["z"], 5.0, Config.BigBanks["paleto"]["object"], false, false, false)
-
                 if object ~= 0 then
                     SetEntityHeading(object, Config.BigBanks["paleto"]["heading"].open)
                 end
             else
-                TriggerServerEvent('qb-doorlock:server:updateState', 85, true)
                 local object = GetClosestObjectOfType(Config.BigBanks["paleto"]["coords"]["x"], Config.BigBanks["paleto"]["coords"]["y"], Config.BigBanks["paleto"]["coords"]["z"], 5.0, Config.BigBanks["paleto"]["object"], false, false, false)
-
                 if object ~= 0 then
                     SetEntityHeading(object, Config.BigBanks["paleto"]["heading"].closed)
                 end

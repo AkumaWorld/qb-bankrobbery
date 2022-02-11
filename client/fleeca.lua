@@ -77,7 +77,6 @@ function DrawText3Ds(x, y, z, text) -- Globally used
 end
 
 local function OpenPaletoDoor()
-    TriggerServerEvent('qb-doorlock:server:updateState', 85, false)
     local object = GetClosestObjectOfType(Config.BigBanks["paleto"]["coords"]["x"], Config.BigBanks["paleto"]["coords"]["y"], Config.BigBanks["paleto"]["coords"]["z"], 5.0, Config.BigBanks["paleto"]["object"], false, false, false)
     local timeOut = 10
     local entHeading = Config.BigBanks["paleto"]["heading"].closed
@@ -168,83 +167,72 @@ function openLocker(bankId, lockerId) -- Globally Used
     end
     TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', true)
     if bankId == "paleto" then
-        QBCore.Functions.TriggerCallback('QBCore:HasItem', function(hasItem)
-            if hasItem then
-                loadAnimDict("anim@heists@fleeca_bank@drilling")
-                TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
-                local pos = GetEntityCoords(PlayerPedId(), true)
-                local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
-                AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
-                IsDrilling = true
-                TriggerEvent('Drilling:Start',function(Success)
-                    if Success then
-                        StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
-                        DetachEntity(DrillObject, true, true)
-                        DeleteObject(DrillObject)
-                        TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
-                        TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
-                        TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'paleto')
-                        QBCore.Functions.Notify("Successful!", "success")
-                        IsDrilling = false
-                    else
-                        StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
-                        TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
-                        DetachEntity(DrillObject, true, true)
-                        DeleteObject(DrillObject)
-                        QBCore.Functions.Notify("Canceled..", "error")
-                        IsDrilling = false
-                    end
-                end)
-                CreateThread(function()
-                    while IsDrilling do
-                        TriggerServerEvent('hud:server:GainStress', math.random(2, 4))
-                        Wait(15000)
-                    end
-                end)
-            else
-                QBCore.Functions.Notify("Looks like the safe lock is too strong ..", "error")
-                TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
-            end
-        end, "drill")
-    elseif bankId == "pacific" then
-        QBCore.Functions.TriggerCallback('QBCore:HasItem', function(hasItem)
-            if hasItem then
-                loadAnimDict("anim@heists@fleeca_bank@drilling")
-                TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
-                local pos = GetEntityCoords(PlayerPedId(), true)
-                local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
-                AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
-                TriggerEvent('Drilling:Start',function(Success)
-                    if Success then
-                        StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
-                        DetachEntity(DrillObject, true, true)
-                        DeleteObject(DrillObject)
+        loadAnimDict("anim@heists@fleeca_bank@drilling")
+        TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
+        local pos = GetEntityCoords(PlayerPedId(), true)
+        local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
+        AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
+        IsDrilling = true
+        TriggerEvent('Drilling:Start',function(Success)
+            if Success then
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
+                DetachEntity(DrillObject, true, true)
+                DeleteObject(DrillObject)
 
-                        TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
-                        TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
-                        TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'pacific')
-                        QBCore.Functions.Notify("Successful!", "success")
-                        IsDrilling = false
-                    else
-                        StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
-                        TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
-                        DetachEntity(DrillObject, true, true)
-                        DeleteObject(DrillObject)
-                        QBCore.Functions.Notify("Canceled..", "error")
-                        IsDrilling = false
-                    end
-                end)
-                CreateThread(function()
-                    while IsDrilling do
-                        TriggerServerEvent('hud:server:GainStress', math.random(2, 4))
-                        Wait(15000)
-                    end
-                end)
-            else
-                QBCore.Functions.Notify("Looks like the safe lock is too strong ..", "error")
+                TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
+                TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'paleto')
+                QBCore.Functions.Notify("Successful!", "success")
+                IsDrilling = false
+            else
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
+                DetachEntity(DrillObject, true, true)
+                DeleteObject(DrillObject)
+
+                TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
+                QBCore.Functions.Notify("Canceled..", "error")
+                IsDrilling = false
             end
-        end, "drill")
+        end)
+        CreateThread(function()
+            while IsDrilling do
+                TriggerServerEvent('hud:server:GainStress', math.random(2, 4))
+                Wait(15000)
+            end
+        end)
+    elseif bankId == "pacific" then
+        loadAnimDict("anim@heists@fleeca_bank@drilling")
+        TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
+        local pos = GetEntityCoords(PlayerPedId(), true)
+        local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
+        AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
+        TriggerEvent('Drilling:Start',function(Success)
+            if Success then
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
+                DetachEntity(DrillObject, true, true)
+                DeleteObject(DrillObject)
+
+                TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
+                TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
+                TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'pacific')
+                QBCore.Functions.Notify("Successful!", "success")
+                IsDrilling = false
+            else
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
+                DetachEntity(DrillObject, true, true)
+                DeleteObject(DrillObject)
+
+                TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
+                QBCore.Functions.Notify("Canceled..", "error")
+                IsDrilling = false
+            end
+        end)
+        CreateThread(function()
+            while IsDrilling do
+                TriggerServerEvent('hud:server:GainStress', math.random(2, 4))
+                Wait(15000)
+            end
+        end)
     else
         loadAnimDict("anim@heists@fleeca_bank@drilling")
         TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
@@ -267,7 +255,8 @@ function openLocker(bankId, lockerId) -- Globally Used
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteObject(DrillObject)
-    
+
+
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
                 IsDrilling = false

@@ -39,16 +39,14 @@ Config.maxVaultBagsWorth = 10000
 Config.SmallBankTimer = 30
 Config.BigBankTimer = 60
 
-Config.HitsNeeded = 13 -- The amount of powerstation needed to be hit to cause a blackout
+Config.PaletoDoor1 = 85
+Config.PaletoDoor2 = 86
+Config.PacificDoor1 = 1
+Config.PacificDoor2 = 2
+Config.PacificDoor3 = 3
+Config.PacificDoor4 = 4
 
-Config.RewardTypes = {
-    [1] = {
-        type = "item"
-    },
-    [2] = {
-        type = "money",
-    }
-}
+Config.HitsNeeded = 13 -- The amount of powerstation needed to be hit to cause a blackout
 
 -- Thermite Minigame Settings
 Config.ThermiteBlocks = 18
@@ -62,9 +60,9 @@ Config.FleecaBlocks = 4
 Config.FleecaRepeat = 3
 
 -- Paleto Laptop Config
-Config.PaletoTime = 7
-Config.PaletoBlocks = 5
-Config.PaletoRepeat = 4
+Config.PaletoTime = 17
+Config.PaletoBlocks = 3
+Config.PaletoRepeat = 1
 
 -- Pacific Laptop Config
 Config.PacificTime = 8
@@ -80,6 +78,15 @@ Config.VaultRepeat = 5
 Config.VaultBackTime = 8
 Config.VaultBackBlocks = 6
 Config.VaultBackRepeat = 5
+
+Config.RewardTypes = {
+    [1] = {
+        type = "item"
+    },
+    [2] = {
+        type = "money",
+    }
+}
 
 Config.LockerRewards = {
     ["tier1"] = {
@@ -504,7 +511,7 @@ Config.SmallBanks = {
 Config.BigBanks = {
     ["paleto"] = {
         ["label"] = "Blaine County Savings Bank",
-        ["coords"] = vector3(-105.61, 6472.03, 31.62),
+        ["coords"] = vector4(-106.060, 6472.420, 31.010, 43.500),
         ["alarm"] = true,
         ["object"] = -1185205679,
         ["heading"] = {
@@ -513,61 +520,58 @@ Config.BigBanks = {
         },
         ["thermite"] = {
             [1] = {
-                ["coords"] = vector3(-106.11, 6475.36, 31.62),
+                ["coords"] = vector3(-105.782, 6474.974, 31.626),
+                ["heading"] = 310.0,
                 ["isOpened"] = false,
-                ["doorId"] = 5
+                ["doorId"] = 86
             }
         },
         ["camId"] = 26,
         ["isOpened"] = false,
         ["lockers"] = {
             [1] = {
-                ["coords"] = vector3(-107.4, 6473.87, 31.62),
+                ["coords"] = vector3(-106.597, 6477.979, 31.626),
+                ["heading"] = 40.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [2] = {
-                ["coords"] = vector3(-107.66, 6475.61, 31.62),
+                ["coords"] = vector3(-105.398, 6478.903, 31.649),
+                ["heading"] = 40.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [3] = {
-                ["coords"] = vector3(-103.52, 6475.03, 31.62),
+                ["coords"] = vector3(-104.137, 6479.149, 31.626),
+                ["heading"] = 310.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [4] = {
-                ["coords"] = vector3(-102.3, 6476.13, 31.66),
+                ["coords"] = vector3(-102.636, 6477.651, 31.678),
+                ["heading"] = 310.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [5] = {
-                ["coords"] = vector3(-102.43, 6477.45, 31.67),
+                ["coords"] = vector3(-102.308, 6476.092, 31.626),
+                ["heading"] = 220.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
             [6] = {
-                ["coords"] = vector3(-103.97, 6478.97, 31.62),
+                ["coords"] = vector3(-103.241, 6475.249, 31.647),
+                ["heading"] = 220.0,
                 ["isBusy"] = false,
                 ["isOpened"] = false
             },
-            [7] = {
-                ["coords"] = vector3(-105.39, 6479.19, 31.67),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            },
-            [8] = {
-                ["coords"] = vector3(-106.57, 6478.01, 31.62),
-                ["isBusy"] = false,
-                ["isOpened"] = false
-            }
         }
     },
     ["pacific"] = {
         ["label"] = "Pacific Standard",
         ["coords"] = {
             [1] = vector3(261.95, 223.11, 106.28),
-            [2] = vector3(253.25, 228.44, 101.68)
+            [2] = vector4(253.210, 228.30, 100.700, 73.150)
         },
         ["alarm"] = true,
         ["object"] = 961976194,

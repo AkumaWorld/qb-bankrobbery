@@ -1,4 +1,4 @@
-# WIP v0.1  
+# WIP v0.2  
 WORK IN PROGRESS DO NOT USE  
   
 # qb-bankrobbery  
@@ -11,7 +11,7 @@ This BANK ROBBERY is work in progress and features may not work properly.
   
 # Info  
 This bank robbery will make the following  
-Fleeca Bank, 3x Drill Spots, 1x Table, 2x Trolleys  
+Fleeca Bank, 6x Drill Spots, 1x Table, 2x Trolleys  
 Paleto Bank, 3x Drill Spots, 1x Table, 2x Trolleys  
 Pacific Bank, 5x Drill Spots, 1x Table, 4x Trolleys  
 Lower Vault, UNKOWN AT THIS TIME  
