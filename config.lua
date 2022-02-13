@@ -614,6 +614,19 @@ Config.BigBanks = {
             closed = 45.45,
             open = 130.45
         },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(-107.038, 6473.670, 30.626),
+                heading = 315.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(-107.525, 6475.475, 30.626),
+                heading = 225.0,
+                grabbed = false
+            },
+        },
         ["thermite"] = {
             [1] = {
                 ["coords"] = vector3(-105.782, 6474.974, 31.626),
