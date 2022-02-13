@@ -550,3 +550,40 @@ CreateThread(function()
         TriggerClientEvent("police:client:EnableAllCameras", -1)
     end
 end)
+
+-- // Trolleys \\ --
+RegisterServerEvent('qb-bankrobbery:server:modelSync', function(closestBank, k, model) -- Stores the loot model from the client and pushes it to all clients
+    TriggerClientEvent('qb-bankrobbery:client:modelSync', -1, closestBank, k, model)
+end)
+RegisterServerEvent('qb-bankrobbery:server:lootSync', function(closestBank, type, k) -- Grabs the type from the client that is being looted
+    TriggerClientEvent('qb-bankrobbery:client:lootSync', -1, closestBank, type, k) -- Pushes the type back to the config to be looted
+end)
+RegisterNetEvent('qb-bankrobbery:server:FleecaTrolleyReward', function(Trolley, pos, closestBank) -- Reward for the fleeca Trolley
+	local src = source
+	local Player = QBCore.Functions.GetPlayer(src)
+    local item
+
+    local FleecaDist = #(pos - vector3(Config.SmallBanks[closestBank]['coords'].x, Config.SmallBanks[closestBank]['coords'].y, Config.SmallBanks[closestBank]['coords'].z ))
+    if FleecaDist <= 15 then 
+
+        local MarkedBags = math.random(Config.minFleecaBags, Config.maxFleecaBags)
+        local info = {worth = math.random(Config.minFleecaBagsWorth, Config.maxFleecaBagsWorth)}
+        local GoldBars = math.random(Config.minFleecaGoldBars, Config.maxFleecaGoldBars)
+
+        if Trolley == 'ch_prop_gold_bar_01a' then 
+            local item = 'goldbar'
+            Player.Functions.AddItem(item, GoldBars, false)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add')
+            TriggerClientEvent('QBCore:Notify', src, 'You got ' .. GoldBars .. ' Gold Bars')
+            TriggerEvent('qb-log:server:CreateLog', 'bankrobbery', 'Bank Robbery', 'green', '**Goldbars**:\n'..GoldBars..'\n**Person**:\n'..GetPlayerName(src))
+
+        elseif Trolley == 'hei_prop_heist_cash_pile' then 
+            local item = 'markedbills'
+            Player.Functions.AddItem(item, MarkedBags, false, info)
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add')
+            TriggerClientEvent('QBCore:Notify', src, 'You got ' .. MarkedBags .. ' bags of inked money')
+            TriggerEvent('qb-log:server:CreateLog', 'bankrobbery', 'Bank Robbery', 'green', '**Cash**:\n'..MarkedBags..' worth $'..info.worth..'\n**Person**:\n'..GetPlayerName(src))
+        end
+
+    end
+end)

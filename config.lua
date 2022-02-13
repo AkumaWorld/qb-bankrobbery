@@ -43,6 +43,28 @@ Config.maxPacificBagsWorth = 15000
 Config.minVaultBagsWorth = 7500
 Config.maxVaultBagsWorth = 20000
 
+-- Trolley Populate Chance / 100
+Config.FleecaTrolleyChance = 100
+Config.PaletoTrolleyChance = 100
+Config.PacificTrolleyChance = 100
+Config.VaultTrolleyChance = 100
+
+-- Trolley Gold Chances / 100
+Config.FleecaGoldbarChance = 10
+Config.PaletoGoldbarChance = 10
+Config.PacificGoldbarChance = 10
+Config.VaultGoldbarChance = 10
+
+-- Trolley Gold Bar Amounts
+Config.minFleecaGoldBars = 3
+Config.maxFleecaGoldBars = 6
+Config.minPaletoGoldBars = 5
+Config.maxPaletoGoldBars = 8
+Config.minPacificGoldBars = 6
+Config.maxPacificGoldBars = 10
+Config.minVaultGoldBars = 8
+Config.maxVaultGoldBars = 11
+
 -- Bank Cooldown
 Config.SmallBankTimer = 30
 Config.BigBankTimer = 60
@@ -274,6 +296,19 @@ Config.SmallBanks = {
             closed = 250.0,
             open = 160.0
         },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(149.5361, -1045.02, 28.346),
+                heading = 160.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(150.8701, -1046.30, 28.346),
+                heading = 70.0,
+                grabbed = false
+            },
+        },
         ["camId"] = 22,
         ["isOpened"] = false,
         ["lockers"] = {
@@ -323,6 +358,19 @@ Config.SmallBanks = {
         ["heading"] = {
             closed = 250.0,
             open = 160.0
+        },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(-350.955, -54.3646, 48.014),
+                heading = 160.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(-349.708, -55.5932, 48.014),
+                heading = 70.0,
+                grabbed = false
+            },
         },
         ["camId"] = 23,
         ["isOpened"] = false,
@@ -374,6 +422,19 @@ Config.SmallBanks = {
             closed = 296.863,
             open = 206.863
         },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(-1209.60, -333.876, 36.759),
+                heading = 206.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(-1207.67, -333.946, 36.759),
+                heading = 115.0,
+                grabbed = false
+            },
+        },
         ["camId"] = 24,
         ["isOpened"] = false,
         ["lockers"] = {
@@ -417,13 +478,25 @@ Config.SmallBanks = {
     },
     [5] = {
         ["label"] = "Great Ocean Hwy",
-        -- -2956.564, 481.957, 15.297
         ["coords"] = vector4(-2956.500, 482.075, 15.300, 347.00),
         ["alarm"] = true,
         ["object"] = `hei_prop_heist_sec_door`,
         ["heading"] = {
             closed = 357.542,
             open = 267.542
+        },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(-2958.34, 484.0975, 14.675),
+                heading = 268.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(-2957.35, 485.6234, 14.675),
+                heading = 178.0,
+                grabbed = false
+            },
         },
         ["camId"] = 25,
         ["isOpened"] = false,
@@ -474,6 +547,19 @@ Config.SmallBanks = {
         ["heading"] = {
             closed = -270.542,
             open = -370.542
+        },
+        -- Cash/Gold Trolleys
+        ["trolleys"] = {
+            {
+                coords = vector3(1173.668, 2711.000, 37.066),
+                heading = 0.00,
+                grabbed = false
+            },
+            {
+                coords = vector3(1172.139, 2711.782, 37.066),
+                heading = 270.00,
+                grabbed = false
+            },
         },
         ["camId"] = 25,
         ["isOpened"] = false,
