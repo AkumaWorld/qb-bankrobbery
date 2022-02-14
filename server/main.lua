@@ -637,7 +637,7 @@ RegisterNetEvent('qb-bankrobbery:server:PacificTrolleyReward', function(Trolley,
 	local Player = QBCore.Functions.GetPlayer(src)
     local item
 
-    local PacificDist = #(pos - vector3(Config.BigBanks["pacific"]['coords'].x, Config.BigBanks["pacific"]['coords'].y, Config.BigBanks["pacific"]['coords'].z ))
+    local PacificDist = #(pos - vector3(Config.BigBanks["pacific"]['coords'][2].x, Config.BigBanks["pacific"]['coords'][2].y, Config.BigBanks["pacific"]['coords'][2].z ))
     if PacificDist <= 15 then 
 
         local MarkedBags = math.random(Config.minPacificBags, Config.maxPacificBags)
