@@ -600,7 +600,7 @@ RegisterNetEvent('qb-bankrobbery:server:PaletoTrolleyReward', function(Trolley, 
 	local Player = QBCore.Functions.GetPlayer(src)
     local item
 
-    local PaletoDist = #(pos - vector3(Config.BigBanks["paleto"]['coords'].x, Config.SmallBanks[closestBank]['coords'].y, Config.SmallBanks[closestBank]['coords'].z ))
+    local PaletoDist = #(pos - vector3(Config.BigBanks["paleto"]['coords'].x, Config.BigBanks["paleto"]['coords'].y, Config.BigBanks["paleto"]['coords'].z ))
     if PaletoDist <= 15 then 
 
         local MarkedBags = math.random(Config.minPaletoBags, Config.maxPaletoBags)
