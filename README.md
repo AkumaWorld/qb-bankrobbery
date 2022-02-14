@@ -82,9 +82,9 @@ Have an egg or other valuable and break through the case to grab it.
  
 # Dependancies [Minigames]  
 
-Laptop Hack - https://github.com/NathanERP/NoPixel-minigame/tree/main/fivem-script
-Thermite Memory Game - https://github.com/pushkart2/memorygame
-Lockpick - https://github.com/NathanERP/qb-lock
+* Laptop Hack - https://github.com/NathanERP/NoPixel-minigame/tree/main/fivem-script
+* Thermite Memory Game - https://github.com/pushkart2/memorygame
+* Lockpick - https://github.com/NathanERP/qb-lock
 
 # Add to QBCore
 
