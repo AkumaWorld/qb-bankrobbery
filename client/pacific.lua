@@ -2,6 +2,7 @@
 
 function OnHackPacificDone(success)
     if success then
+        TriggerEvent('qb-bankrobbery:client:SetUpPacificTrolleys')
         local VaultWait = Config.PacificVaultWait / 1000
         local VaultWaitMins = tonumber(VaultWait) / 60
         QBCore.Functions.Notify("Door Opening in: "..math.floor(VaultWaitMins).." Minutes", 'success')
@@ -345,7 +346,7 @@ CreateThread(function()
                         locker = k
                     }
                 },
-                distance = 1.5,
+                distance = 0.75,
             })
         end
     end
@@ -375,4 +376,9 @@ CreateThread(function()
             })
         end
     end
+end)
+
+-- // TEST SHIT \\ --
+RegisterCommand('setupPacific', function()
+    OnHackPacificDone(true)
 end)

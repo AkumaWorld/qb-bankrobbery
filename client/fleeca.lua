@@ -552,7 +552,7 @@ CreateThread(function()
 end)
 
 -- qb-target exports
-CreateThread(function() -- Drill Spots
+CreateThread(function() -- Fleeca Drill Spots
     for fweecybwo, _ in pairs(Config.SmallBanks) do
         for k,v in pairs(Config.SmallBanks[fweecybwo]['lockers']) do
             exports['qb-target']:AddBoxZone('FleecaLockers'..math.random(1,200), vector3(Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].x, Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].y, Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z), 1.00, 0.80, {
@@ -581,7 +581,7 @@ CreateThread(function() -- Trolleys
             exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].x, Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].y, Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
                 name = 'Trolley'..math.random(1,100), 
                 heading = Config.SmallBanks[fweecybwo]['trolleys'][k]['heading'],
-                debugPoly = true,
+                debugPoly = Config.DebugPoly,
                 minZ = Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z-1,
                 maxZ = Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z+1.5,
                 }, {
@@ -603,7 +603,7 @@ CreateThread(function() -- Trolleys Paleto
         exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.BigBanks["paleto"]['trolleys'][k]['coords'].x, Config.BigBanks["paleto"]['trolleys'][k]['coords'].y, Config.BigBanks["paleto"]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
             name = 'Trolley'..math.random(1,100), 
             heading = Config.BigBanks["paleto"]['trolleys'][k]['heading'],
-            debugPoly = true,
+            debugPoly = Config.DebugPoly,
             minZ = Config.BigBanks["paleto"]['trolleys'][k]['coords'].z-1,
             maxZ = Config.BigBanks["paleto"]['trolleys'][k]['coords'].z+1.5,
             }, {
@@ -619,8 +619,30 @@ CreateThread(function() -- Trolleys Paleto
         })
     end
 end)
+CreateThread(function() -- Trolleys Pacific
+    for k,v in pairs(Config.BigBanks["pacific"]['trolleys']) do
+        exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.BigBanks["pacific"]['trolleys'][k]['coords'].x, Config.BigBanks["pacific"]['trolleys'][k]['coords'].y, Config.BigBanks["pacific"]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
+            name = 'Trolley'..math.random(1,100), 
+            heading = Config.BigBanks["pacific"]['trolleys'][k]['heading'],
+            debugPoly = Config.DebugPoly,
+            minZ = Config.BigBanks["pacific"]['trolleys'][k]['coords'].z-1,
+            maxZ = Config.BigBanks["pacific"]['trolleys'][k]['coords'].z+1.5,
+            }, {
+            options = { 
+            { 
+                type = 'client',
+                event = 'qb-bankrobbery:client:lootpacifictrolley',
+                icon = 'fas fa-hand-paper',
+                label = 'Grab',
+            }
+            },
+            distance = 2.0,
+        })
+    end
+end)
 
 -- // Trolley Events \\ --
+-- Fleeca
 RegisterNetEvent('qb-bankrobbery:client:SetUpFleecaTrolleys', function(closestBank)
     for k,v in pairs(Config.SmallBanks[closestBank]['trolleys']) do
         local TrolleyChance = math.random(1,100)
@@ -751,6 +773,7 @@ RegisterNetEvent('qb-bankrobbery:client:lootSync', function(closestBank, type, k
     end
 end)
 
+-- Paleto
 RegisterNetEvent('qb-bankrobbery:client:SetUpPaletoTrolleys', function()
     for k,v in pairs(Config.BigBanks["paleto"]['trolleys']) do
         local TrolleyChance = math.random(1,100)
@@ -870,7 +893,6 @@ RegisterNetEvent('qb-bankrobbery:client:GrabPaletoTrolley', function(grabModel)
         DeleteObject(grabObject)
     end)
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:modelSyncPaleto', function(k, model) -- Grabs the model from the server
     Config.BigBanks["paleto"]['trolleys'][k]['model'] = model
 end)
@@ -879,6 +901,137 @@ RegisterNetEvent('qb-bankrobbery:client:lootSyncPaleto', function(type, k) -- Pu
         Config.BigBanks["paleto"][type][k]['grabbed'] = not Config.BigBanks["paleto"][type][k]['grabbed']
     else
         Config.BigBanks["paleto"][type]['grabbed'] = not Config.BigBanks["paleto"][type]['grabbed']
+    end
+end)
+
+-- Pacific
+RegisterNetEvent('qb-bankrobbery:client:SetUpPacificTrolleys', function()
+    for k,v in pairs(Config.BigBanks["pacific"]['trolleys']) do
+        local TrolleyChance = math.random(1,100)
+        local loc = Config.BigBanks["pacific"]['trolleys'][k]['coords']
+        if TrolleyChance <= Config.PacificTrolleyChance then
+            local TrolleyLoot = math.random(1,100)
+            if TrolleyLoot <= Config.PacificGoldbarChance then 
+                Trolley = CreateObject(2007413986, loc.x, loc.y, loc.z, 1, 0, 0)
+                TriggerServerEvent('qb-bankrobbery:server:modelSyncPacific', k, 2007413986)  -- Sends the loot model to the server to be stored
+            else 
+                Trolley = CreateObject(269934519, loc.x, loc.y, loc.z, 1, 0, 0)
+                TriggerServerEvent('qb-bankrobbery:server:modelSyncPacific', k, 269934519)  -- Sends the loot model to the server to be stored
+            end
+            SetEntityHeading(Trolley, v['heading'])
+        end
+    end
+end)
+RegisterNetEvent('qb-bankrobbery:client:lootpacifictrolley', function()
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+    for k,v in pairs(Config.BigBanks["pacific"]['trolleys']) do
+        if not v['grabbed'] then
+            if Config.BigBanks["pacific"]['isOpened'] then
+                local TrolleyDist = #(pos - v['coords'])
+                if TrolleyDist <= 1.5 then
+                    LocalPlayer.state:set('inv_busy', true, true) -- Busy
+                    TriggerServerEvent('qb-bankrobbery:server:lootSyncPacific', 'trolleys', k)  -- Syncs the loot to the server so clients cannot take from something that has already been grabbed
+                    local ped = PlayerPedId()
+                    local pos, pedRotation = GetEntityCoords(ped), vector3(0.0, 0.0, 0.0)
+                    local trollyModel = Config.BigBanks["pacific"]['trolleys'][k]['model']
+                    local animDict = 'anim@heists@ornate_bank@grab_cash'
+
+                    if trollyModel == 881130828 then
+                        grabModel = 'ch_prop_vault_dimaondbox_01a'
+                    elseif trollyModel == 2007413986 then
+                        grabModel = 'ch_prop_gold_bar_01a'
+                    else
+                        grabModel = 'hei_prop_heist_cash_pile'
+                    end
+
+                    loadAnimDict(animDict)
+                    loadModel('hei_p_m_bag_var22_arm_s')
+
+                    sceneObject = GetClosestObjectOfType(Config.BigBanks["pacific"]['trolleys'][k]['coords'], 2.0, trollyModel, 0, 0, 0)
+                    bag = CreateObject(GetHashKey('hei_p_m_bag_var22_arm_s'), pos, true, false, false)
+
+                    while not NetworkHasControlOfEntity(sceneObject) do
+                        Wait(1)
+                        NetworkRequestControlOfEntity(sceneObject)
+                    end
+
+                    scene1 = NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
+                    NetworkAddPedToSynchronisedScene(ped, scene1, animDict, 'intro', 1.5, -4.0, 1, 16, 1148846080, 0)
+                    NetworkAddEntityToSynchronisedScene(bag, scene1, animDict, 'bag_intro', 4.0, -8.0, 1)
+
+                    scene2 =  NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
+                    NetworkAddPedToSynchronisedScene(ped, scene2, animDict, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
+                    NetworkAddEntityToSynchronisedScene(bag, scene2, animDict, 'bag_grab', 4.0, -8.0, 1)
+                    NetworkAddEntityToSynchronisedScene(sceneObject, scene2, animDict, 'cart_cash_dissapear', 4.0, -8.0, 1)
+
+                    scene3 =  NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
+                    NetworkAddPedToSynchronisedScene(ped, scene3, animDict, 'exit', 1.5, -4.0, 1, 16, 1148846080, 0)
+                    NetworkAddEntityToSynchronisedScene(bag, scene3, animDict, 'bag_exit', 4.0, -8.0, 1)
+
+                    NetworkStartSynchronisedScene(scene1)
+                    Wait(1750)
+                    TriggerEvent('qb-bankrobbery:client:GrabPacificTrolley', grabModel)
+                    NetworkStartSynchronisedScene(scene2)
+                    Wait(37000)
+                    NetworkStartSynchronisedScene(scene3)
+                    Wait(2000)
+
+                    local emptyobj = 769923921
+                    newTrolly = CreateObject(emptyobj, Config.BigBanks["pacific"]['trolleys'][k]['coords'], true, false, false)
+                    SetEntityRotation(newTrolly, 0, 0, GetEntityHeading(sceneObject), 1, 0)
+                    DeleteObject(sceneObject)
+                    DeleteObject(bag)
+                    TriggerServerEvent('qb-bankrobbery:server:PacificTrolleyReward', grabModel, pos)
+                    LocalPlayer.state:set('inv_busy', false, true) -- Not Busy
+                end
+            else 
+                QBCore.Functions.Notify('How did you get in here?', 'error', 4500) 
+            end
+        end
+    end
+end)
+RegisterNetEvent('qb-bankrobbery:client:GrabPacificTrolley', function(grabModel)
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+    local grabModel = GetHashKey(grabModel)
+
+    loadModel(grabModel)
+    local grabObject = CreateObject(grabModel, pos, true)
+
+    FreezeEntityPosition(grabObject, true)
+    SetEntityInvincible(grabObject, true)
+    SetEntityNoCollisionEntity(grabObject, ped)
+    SetEntityVisible(grabObject, false, false)
+    AttachEntityToEntity(grabObject, ped, GetPedBoneIndex(ped, 60309), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 0, true)
+    local Looting = GetGameTimer()
+
+    CreateThread(function()
+        while GetGameTimer() - Looting < 37000 do
+            Wait(1)
+            DisableControlAction(0, 73, true)
+            if HasAnimEventFired(ped, GetHashKey('CASH_APPEAR')) then
+                if not IsEntityVisible(grabObject) then
+                    SetEntityVisible(grabObject, true, false)
+                end
+            end
+            if HasAnimEventFired(ped, GetHashKey('RELEASE_CASH_DESTROY')) then
+                if IsEntityVisible(grabObject) then
+                    SetEntityVisible(grabObject, false, false)
+                end
+            end
+        end
+        DeleteObject(grabObject)
+    end)
+end)
+RegisterNetEvent('qb-bankrobbery:client:modelSyncPacific', function(k, model) -- Grabs the model from the server
+    Config.BigBanks["pacific"]['trolleys'][k]['model'] = model
+end)
+RegisterNetEvent('qb-bankrobbery:client:lootSyncPacific', function(type, k) -- Pushes the stored model to the type to state 'grabbed' in the config
+    if k then 
+        Config.BigBanks["pacific"][type][k]['grabbed'] = not Config.BigBanks["pacific"][type][k]['grabbed']
+    else
+        Config.BigBanks["pacific"][type]['grabbed'] = not Config.BigBanks["pacific"][type]['grabbed']
     end
 end)
 

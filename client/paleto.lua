@@ -4,7 +4,7 @@ function OnPaletoHackDone(success)
         local VaultWait = Config.PaletoVaultWait / 1000
         local VaultWaitMins = tonumber(VaultWait) / 60
         QBCore.Functions.Notify("Door Opening in: "..math.floor(VaultWaitMins).." Minutes", 'success')
-        -- Wait(Config.PaletoVaultWait)
+        Wait(Config.PaletoVaultWait)
         TriggerServerEvent('qb-bankrobbery:server:setBankState', "paleto", true)
     else
 		QBCore.Functions.Notify("You Suck!", 'error')
