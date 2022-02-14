@@ -73,8 +73,8 @@ Target: qb-target (For targeting the trolleys, drill spots etc...)
 # Dependancies [Minigames]  
 These can be replaced with your own  
  
-Laptop Hack:  
-Thermite Memory Game:  
+Laptop Hack: (https://github.com/NathanERP/NoPixel-minigame/tree/main/fivem-script)  
+Thermite Memory Game: (https://github.com/pushkart2/memorygame)  
 Lockpick:  
   
 #
