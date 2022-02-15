@@ -90,7 +90,7 @@ Have an egg or other valuable and break through the case to grab it.
 
 - qb-core/shared/items.lua
 
-```lua
+```
 	["laptop_pink"] 		 	     = {["name"] = "laptop_pink", 					["label"] = "Pink Laptop", 				["weight"] = 15000, 	    ["type"] = "item", 		["image"] = "laptop_pink.png", 			["unique"] = true, 		["useable"] = true, 	["shouldClose"] = true,	   ["combinable"] = nil,   ["description"] = "A security Laptop"},
 	["laptop_green"] 		 	     = {["name"] = "laptop_green", 					["label"] = "Green Laptop", 			["weight"] = 15000, 	    ["type"] = "item", 		["image"] = "laptop_green.png", 		["unique"] = true, 		["useable"] = true, 	["shouldClose"] = true,	   ["combinable"] = nil,   ["description"] = "A security Laptop"},
 	["laptop_red"] 		 	     	 = {["name"] = "laptop_red", 					["label"] = "Red Laptop", 				["weight"] = 15000, 	    ["type"] = "item", 		["image"] = "laptop_red.png", 			["unique"] = true, 		["useable"] = true, 	["shouldClose"] = true,	   ["combinable"] = nil,   ["description"] = "A security Laptop"},
