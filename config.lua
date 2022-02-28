@@ -16,6 +16,10 @@ Config.FleecaVaultWait = 180000 -- 3 Mins
 Config.PaletoVaultWait = 300000 -- 5 Mins
 Config.PacificVaultWait = 300000 -- 5 Mins
 
+-- Purchasable laptops
+Config.Laptops = true
+Config.LaptopPedLoc = vector4(-1360.10, -759.562, 21.304, 302.6)
+
 -- Laptop Pricing for menu
 Config.PinkLaptopPrice = 10000
 Config.GreenLaptopPrice = 20000
