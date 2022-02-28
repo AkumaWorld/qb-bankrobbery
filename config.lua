@@ -1,6 +1,6 @@
 Config = Config or {}
 
-Config.DebugPoly = true
+Config.DebugPoly = false
 
 Config.ItemTiers = 1
 
@@ -52,8 +52,8 @@ Config.VaultTrolleyChance = 100
 -- Trolley Gold Chances / 100
 Config.FleecaGoldbarChance = 10
 Config.PaletoGoldbarChance = 10
-Config.PacificGoldbarChance = 10
-Config.VaultGoldbarChance = 10
+Config.PacificGoldbarChance = 50
+Config.VaultGoldbarChance = 70
 
 -- Trolley Gold Bar Amounts
 Config.minFleecaGoldBars = 3

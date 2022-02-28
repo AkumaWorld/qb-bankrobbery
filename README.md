@@ -5,7 +5,22 @@ WORK IN PROGRESS DO NOT USE
 # Preview
 
 Coming Soon 
-  
+
+# How to install  
+
+<tr>
+
+1. Go to your qb-core/server/player.lua, and find `QBCore.Player.CheckPlayerData function` and paste this snippets  
+
+```lua
+    -- HEIST REP
+    PlayerData.metadata['heistrep'] = PlayerData.metadata['heistrep'] or 0
+```
+
+2. Install the qb-bankrobbery directory and set up the config  
+
+3. Make sure to install all items from the readme to your shared/items.lua  
+
 # Info  
 This bank robbery will make the following:
 

@@ -1,5 +1,4 @@
 -- Functions
-
 function OnHackPacificDone(success)
     if success then
         TriggerEvent('qb-bankrobbery:client:SetUpPacificTrolleys')
@@ -12,7 +11,6 @@ function OnHackPacificDone(success)
         QBCore.Functions.Notify("You Suck!", 'error')
 	end
 end
-
 function ThermitePacificPlanting(door)
     local pos = nil
     if door == 1 then
@@ -56,11 +54,9 @@ function ThermitePacificPlanting(door)
         DeleteEntity(thermite)
     end)
 end
-
 function ThermitePacificEffect(door)
     local ptfx = nil
     local PacDoor = nil
-    print(door)
     if door == 1 then
         ptfx = vector3(253.11703, 221.53141, 101.78381)
         PacDoor = Config.PacificDoor3
@@ -89,7 +85,6 @@ function ThermitePacificEffect(door)
 end
 
 -- Events
-
 RegisterNetEvent('qb-bankrobbery:UseBankcardB', function()
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
@@ -105,7 +100,7 @@ RegisterNetEvent('qb-bankrobbery:UseBankcardB', function()
                         if not copsCalled then
                             if Config.BigBanks["pacific"]["alarm"] then
                                 bank = 'Pacific'
-                                TriggerEvent('qb-dispatch:bankrobbery', bank, 1)
+                                TriggerEvent('dispatch:bankrobbery:pacific')
                                 copsCalled = true
                             end
                         end
@@ -148,7 +143,6 @@ RegisterNetEvent('qb-bankrobbery:UseBankcardB', function()
         end)
     end
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:UseRedLaptop', function(laptopData)
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
@@ -160,6 +154,10 @@ RegisterNetEvent('qb-bankrobbery:client:UseRedLaptop', function(laptopData)
                 if dist < 1.5 then
                     if CurrentCops >= Config.MinimumPacificPolice then
                         if not Config.BigBanks["pacific"]["isOpened"] then
+                            TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData) -- Removes a use from the laptop
+                            if math.random(1, 100) <= 65 and not IsWearingHandshoes() then
+                                TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+                            end
                             QBCore.Functions.Progressbar("hack_gate", "Connecting laptop...", math.random(5000, 10000), false, true, {
                                 disableMovement = true,
                                 disableCarMovement = true,
@@ -175,7 +173,7 @@ RegisterNetEvent('qb-bankrobbery:client:UseRedLaptop', function(laptopData)
                                 if not copsCalled then
                                     if Config.BigBanks["pacific"]["alarm"] then
                                         bank = 'Pacific'
-                                        TriggerEvent('qb-dispatch:bankrobbery', bank, 1) 
+                                        TriggerEvent('dispatch:bankrobbery:pacific') 
                                         copsCalled = true
                                     end
                                 end
@@ -196,7 +194,6 @@ RegisterNetEvent('qb-bankrobbery:client:UseRedLaptop', function(laptopData)
         end)
     end
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:LaptopPacific', function()
     local loc = {x,y,z,h}
     loc.x = Config.BigBanks["pacific"]["coords"][2].x
@@ -257,7 +254,6 @@ RegisterNetEvent('qb-bankrobbery:client:LaptopPacific', function()
         OnHackPacificDone(bool)
     end)
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:DrillPacificLocker', function()
     if Config.BigBanks["pacific"]["isOpened"] then
         for k, v in pairs(Config.BigBanks["pacific"]["lockers"]) do
@@ -291,7 +287,6 @@ RegisterNetEvent('qb-bankrobbery:client:DrillPacificLocker', function()
         QBCore.Functions.Notify('How the hell are you here?!', "error")
     end
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:ThermitePacificDoor', function(data)
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
@@ -326,8 +321,8 @@ RegisterNetEvent('qb-bankrobbery:client:ThermitePacificDoor', function(data)
     end
 end)
 
--- Drill Spots
-CreateThread(function() 
+-- Threads
+CreateThread(function() -- Drill Spots
     for bank, _ in pairs(Config.BigBanks) do
         for k,v in pairs(Config.BigBanks["pacific"]['lockers']) do
             exports['qb-target']:AddBoxZone('PacificLockers'..math.random(1,200), vector3(Config.BigBanks["pacific"]['lockers'][k]['coords'].x, Config.BigBanks["pacific"]['lockers'][k]['coords'].y, Config.BigBanks["pacific"]['lockers'][k]['coords'].z), 1.00, 0.80, {
@@ -351,9 +346,7 @@ CreateThread(function()
         end
     end
 end)
-
--- Thermite Spots
-CreateThread(function() 
+CreateThread(function() -- Thermite Spots
     for bank, _ in pairs(Config.BigBanks) do
         for k,v in pairs(Config.BigBanks["pacific"]['thermite']) do
             exports['qb-target']:AddBoxZone('PacificThermite'..math.random(1,200), vector3(Config.BigBanks["pacific"]['thermite'][k]['coords'].x, Config.BigBanks["pacific"]['thermite'][k]['coords'].y, Config.BigBanks["pacific"]['thermite'][k]['coords'].z), 1.00, 0.80, {

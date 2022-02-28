@@ -43,7 +43,6 @@ function thermiteAnimation(k)
 end
 
 -- Events
-
 RegisterNetEvent('thermite:UseThermite', function()
     QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
         if result then
@@ -79,7 +78,6 @@ RegisterNetEvent('thermite:UseThermite', function()
         end
     end, 'thermite')
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:SetStationStatus', function(key, isHit)
     Config.PowerStations[key].hit = isHit
 end)
