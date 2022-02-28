@@ -168,10 +168,9 @@ function openLocker(bankId, lockerId) -- Globally Used
         IsDrilling = true
         TriggerEvent('Drilling:Start',function(Success)
             if Success then
-                Wait(1000)
-                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteEntity(DrillObject)
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'paleto')
@@ -179,9 +178,9 @@ function openLocker(bankId, lockerId) -- Globally Used
                 DrillObject = nil
                 IsDrilling = false
             else
-                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteEntity(DrillObject)
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
                 DrillObject = nil
@@ -201,10 +200,9 @@ function openLocker(bankId, lockerId) -- Globally Used
         AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
         TriggerEvent('Drilling:Start',function(Success)
             if Success then
-                Wait(1000)
-                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteEntity(DrillObject)
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'pacific')
@@ -212,9 +210,9 @@ function openLocker(bankId, lockerId) -- Globally Used
                 DrillObject = nil
                 IsDrilling = false
             else
-                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteEntity(DrillObject)
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
                 DrillObject = nil
@@ -235,10 +233,9 @@ function openLocker(bankId, lockerId) -- Globally Used
         IsDrilling = true
         TriggerEvent('Drilling:Start',function(Success)
             if Success then
-                Wait(1000)
-                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteEntity(DrillObject)
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'small')
@@ -246,9 +243,9 @@ function openLocker(bankId, lockerId) -- Globally Used
                 DrillObject = nil
                 IsDrilling = false
             else
-                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
                 DeleteEntity(DrillObject)
+                StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
                 DrillObject = nil
@@ -683,6 +680,12 @@ RegisterNetEvent('qb-bankrobbery:client:lootfleecatrolley', function()
                     loadModel('hei_p_m_bag_var22_arm_s')
 
                     sceneObject = GetClosestObjectOfType(Config.SmallBanks[closestBank]['trolleys'][k]['coords'], 2.0, trollyModel, 0, 0, 0)
+
+                    if IsEntityPlayingAnim(sceneObject, animDict, "cart_cash_dissapear", 3) then
+                        return
+                    end
+                    SetEntityCollision(sceneObject, true, true) -- Always set collision as anims sometimes mess it up
+
                     bag = CreateObject(GetHashKey('hei_p_m_bag_var22_arm_s'), pos, true, false, false)
 
                     while not NetworkHasControlOfEntity(sceneObject) do
@@ -694,7 +697,7 @@ RegisterNetEvent('qb-bankrobbery:client:lootfleecatrolley', function()
                     NetworkAddPedToSynchronisedScene(ped, scene1, animDict, 'intro', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene1, animDict, 'bag_intro', 4.0, -8.0, 1)
 
-                    scene2 =  NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
+                    scene2 = NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, true, 1065353216, 0, 1.3) -- loops trolly anim so we dont need to spawn a new prop
                     NetworkAddPedToSynchronisedScene(ped, scene2, animDict, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene2, animDict, 'bag_grab', 4.0, -8.0, 1)
                     NetworkAddEntityToSynchronisedScene(sceneObject, scene2, animDict, 'cart_cash_dissapear', 4.0, -8.0, 1)
@@ -814,6 +817,12 @@ RegisterNetEvent('qb-bankrobbery:client:lootpaletotrolley', function()
                     loadModel('hei_p_m_bag_var22_arm_s')
 
                     sceneObject = GetClosestObjectOfType(Config.BigBanks["paleto"]['trolleys'][k]['coords'], 2.0, trollyModel, 0, 0, 0)
+
+                    if IsEntityPlayingAnim(sceneObject, animDict, "cart_cash_dissapear", 3) then
+                        return
+                    end
+                    SetEntityCollision(sceneObject, true, true) -- Always set collision as anims sometimes mess it up
+
                     bag = CreateObject(GetHashKey('hei_p_m_bag_var22_arm_s'), pos, true, false, false)
 
                     while not NetworkHasControlOfEntity(sceneObject) do
@@ -825,7 +834,7 @@ RegisterNetEvent('qb-bankrobbery:client:lootpaletotrolley', function()
                     NetworkAddPedToSynchronisedScene(ped, scene1, animDict, 'intro', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene1, animDict, 'bag_intro', 4.0, -8.0, 1)
 
-                    scene2 =  NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
+                    scene2 = NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, true, 1065353216, 0, 1.3) -- loops trolly anim so we dont need to spawn a new prop
                     NetworkAddPedToSynchronisedScene(ped, scene2, animDict, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene2, animDict, 'bag_grab', 4.0, -8.0, 1)
                     NetworkAddEntityToSynchronisedScene(sceneObject, scene2, animDict, 'cart_cash_dissapear', 4.0, -8.0, 1)
@@ -945,6 +954,12 @@ RegisterNetEvent('qb-bankrobbery:client:lootpacifictrolley', function()
                     loadModel('hei_p_m_bag_var22_arm_s')
 
                     sceneObject = GetClosestObjectOfType(Config.BigBanks["pacific"]['trolleys'][k]['coords'], 2.0, trollyModel, 0, 0, 0)
+
+                    if IsEntityPlayingAnim(sceneObject, animDict, "cart_cash_dissapear", 3) then
+                        return
+                    end
+                    SetEntityCollision(sceneObject, true, true) -- Always set collision as anims sometimes mess it up
+
                     bag = CreateObject(GetHashKey('hei_p_m_bag_var22_arm_s'), pos, true, false, false)
 
                     while not NetworkHasControlOfEntity(sceneObject) do
@@ -956,7 +971,7 @@ RegisterNetEvent('qb-bankrobbery:client:lootpacifictrolley', function()
                     NetworkAddPedToSynchronisedScene(ped, scene1, animDict, 'intro', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene1, animDict, 'bag_intro', 4.0, -8.0, 1)
 
-                    scene2 =  NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
+                    scene2 = NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, true, 1065353216, 0, 1.3) -- loops trolly anim so we dont need to spawn a new prop
                     NetworkAddPedToSynchronisedScene(ped, scene2, animDict, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene2, animDict, 'bag_grab', 4.0, -8.0, 1)
                     NetworkAddEntityToSynchronisedScene(sceneObject, scene2, animDict, 'cart_cash_dissapear', 4.0, -8.0, 1)

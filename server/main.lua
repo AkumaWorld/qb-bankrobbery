@@ -601,7 +601,7 @@ RegisterNetEvent('qb-bankrobbery:server:PaletoTrolleyReward', function(Trolley, 
     local item
 
     local PaletoDist = #(pos - vector3(Config.BigBanks["paleto"]['coords'].x, Config.BigBanks["paleto"]['coords'].y, Config.BigBanks["paleto"]['coords'].z ))
-    if PaletoDist <= 15 then 
+    if PaletoDist <= 25 then 
 
         local MarkedBags = math.random(Config.minPaletoBags, Config.maxPaletoBags)
         local info = {worth = math.random(Config.minPaletoBagsWorth, Config.maxPaletoBagsWorth)}
@@ -636,22 +636,19 @@ RegisterNetEvent('qb-bankrobbery:server:PacificTrolleyReward', function(Trolley,
 	local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
     local item
-
     local PacificDist = #(pos - vector3(Config.BigBanks["pacific"]['coords'][2].x, Config.BigBanks["pacific"]['coords'][2].y, Config.BigBanks["pacific"]['coords'][2].z ))
-    if PacificDist <= 15 then 
-
+    if PacificDist <= 50 then 
         local MarkedBags = math.random(Config.minPacificBags, Config.maxPacificBags)
         local info = {worth = math.random(Config.minPacificBagsWorth, Config.maxPacificBagsWorth)}
         local GoldBars = math.random(Config.minPacificGoldBars, Config.maxPacificGoldBars)
 
-        if Trolley == 'ch_prop_gold_bar_01a' then 
+        if Trolley == 'ch_prop_gold_bar_01a' then
             local item = 'goldbar'
             Player.Functions.AddItem(item, GoldBars, false)
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add')
             TriggerClientEvent('QBCore:Notify', src, 'You got ' .. GoldBars .. ' Gold Bars')
             TriggerEvent('qb-log:server:CreateLog', 'bankrobbery', 'Bank Robbery', 'green', '**Goldbars**:\n'..GoldBars..'\n**Person**:\n'..GetPlayerName(src))
-
-        elseif Trolley == 'hei_prop_heist_cash_pile' then 
+        elseif Trolley == 'hei_prop_heist_cash_pile' then
             local item = 'markedbills'
             Player.Functions.AddItem(item, MarkedBags, false, info)
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add')
