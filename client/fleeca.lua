@@ -684,20 +684,6 @@ RegisterNetEvent('qb-bankrobbery:client:lootfleecatrolley', function()
                     if IsEntityPlayingAnim(sceneObject, animDict, "cart_cash_dissapear", 3) then
                         return
                     end
-                    SetEntityCollision(sceneObject, true, true) -- Always set collision as anims sometimes mess it up
-
-                    bag = CreateObject(GetHashKey('hei_p_m_bag_var22_arm_s'), pos, true, false, false)
-
-                    while not NetworkHasControlOfEntity(sceneObject) do
-                        Wait(1)
-                        NetworkRequestControlOfEntity(sceneObject)
-                    end
-
-                    scene1 = NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, false, 1065353216, 0, 1.3)
-                    NetworkAddPedToSynchronisedScene(ped, scene1, animDict, 'intro', 1.5, -4.0, 1, 16, 1148846080, 0)
-                    NetworkAddEntityToSynchronisedScene(bag, scene1, animDict, 'bag_intro', 4.0, -8.0, 1)
-
-                    scene2 = NetworkCreateSynchronisedScene(GetEntityCoords(sceneObject), GetEntityRotation(sceneObject), 2, true, true, 1065353216, 0, 1.3) -- loops trolly anim so we dont need to spawn a new prop
                     NetworkAddPedToSynchronisedScene(ped, scene2, animDict, 'grab', 1.5, -4.0, 1, 16, 1148846080, 0)
                     NetworkAddEntityToSynchronisedScene(bag, scene2, animDict, 'bag_grab', 4.0, -8.0, 1)
                     NetworkAddEntityToSynchronisedScene(sceneObject, scene2, animDict, 'cart_cash_dissapear', 4.0, -8.0, 1)
@@ -714,10 +700,6 @@ RegisterNetEvent('qb-bankrobbery:client:lootfleecatrolley', function()
                     NetworkStartSynchronisedScene(scene3)
                     Wait(2000)
 
-                    local emptyobj = 769923921
-                    newTrolly = CreateObject(emptyobj, Config.SmallBanks[closestBank]['trolleys'][k]['coords'], true, false, false)
-                    SetEntityRotation(newTrolly, 0, 0, GetEntityHeading(sceneObject), 1, 0)
-                    DeleteObject(sceneObject)
                     DeleteObject(bag)
                     TriggerServerEvent('qb-bankrobbery:server:FleecaTrolleyReward', grabModel, pos, closestBank)
                     LocalPlayer.state:set('inv_busy', false, true) -- Not Busy
