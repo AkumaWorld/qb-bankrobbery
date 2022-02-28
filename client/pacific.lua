@@ -370,8 +370,3 @@ CreateThread(function() -- Thermite Spots
         end
     end
 end)
-
--- // TEST SHIT \\ --
-RegisterCommand('setupPacific', function()
-    OnHackPacificDone(true)
-end)

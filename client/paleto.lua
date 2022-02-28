@@ -343,8 +343,3 @@ CreateThread(function() -- Thermite Spots
         end
     end
 end)
-
--- // TEST SHIT \\ --
-RegisterCommand('setupPaleto', function()
-    OnPaletoHackDone(true)
-end)

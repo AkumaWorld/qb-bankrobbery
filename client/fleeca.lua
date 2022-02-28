@@ -1045,8 +1045,3 @@ RegisterNetEvent('qb-bankrobbery:client:lootSyncPacific', function(type, k) -- P
         Config.BigBanks["pacific"][type]['grabbed'] = not Config.BigBanks["pacific"][type]['grabbed']
     end
 end)
-
--- // TEST SHIT \\ --
-RegisterCommand('setupFleeca', function()
-    OnHackDone(true)
-end)
