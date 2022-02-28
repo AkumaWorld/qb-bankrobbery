@@ -34,7 +34,6 @@ local function ResetBankDoors()
 end
 
 -- Handlers
-
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then
         ResetBankDoors()
@@ -160,31 +159,32 @@ function openLocker(bankId, lockerId) -- Globally Used
         TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
     end
     TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', true)
+    local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
     if bankId == "paleto" then
         loadAnimDict("anim@heists@fleeca_bank@drilling")
         TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
         local pos = GetEntityCoords(PlayerPedId(), true)
-        local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
         AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
         IsDrilling = true
         TriggerEvent('Drilling:Start',function(Success)
             if Success then
+                Wait(1000)
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
-                DeleteObject(DrillObject)
-
+                DeleteEntity(DrillObject)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'paleto')
                 QBCore.Functions.Notify("Successful!", "success")
+                DrillObject = nil
                 IsDrilling = false
             else
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
-                DeleteObject(DrillObject)
-
+                DeleteEntity(DrillObject)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
+                DrillObject = nil
                 IsDrilling = false
             end
         end)
@@ -198,26 +198,26 @@ function openLocker(bankId, lockerId) -- Globally Used
         loadAnimDict("anim@heists@fleeca_bank@drilling")
         TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
         local pos = GetEntityCoords(PlayerPedId(), true)
-        local DrillObject = CreateObject(`hei_prop_heist_drill`, pos.x, pos.y, pos.z, true, true, true)
         AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
         TriggerEvent('Drilling:Start',function(Success)
             if Success then
+                Wait(1000)
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
-                DeleteObject(DrillObject)
-
+                DeleteEntity(DrillObject)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'pacific')
                 QBCore.Functions.Notify("Successful!", "success")
+                DrillObject = nil
                 IsDrilling = false
             else
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
-                DeleteObject(DrillObject)
-
+                DeleteEntity(DrillObject)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
+                DrillObject = nil
                 IsDrilling = false
             end
         end)
@@ -231,28 +231,27 @@ function openLocker(bankId, lockerId) -- Globally Used
         loadAnimDict("anim@heists@fleeca_bank@drilling")
         TaskPlayAnim(PlayerPedId(), 'anim@heists@fleeca_bank@drilling', 'drill_straight_idle' , 3.0, 3.0, -1, 1, 0, false, false, false)
         local pos = GetEntityCoords(PlayerPedId(), true)
-        local DrillObject = CreateObject(GetHashKey("hei_prop_heist_drill"), pos.x, pos.y, pos.z, true, true, true)
         AttachEntityToEntity(DrillObject, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.14, 0, -0.01, 90.0, -90.0, 180.0, true, true, false, true, 1, true)
         IsDrilling = true
         TriggerEvent('Drilling:Start',function(Success)
             if Success then
+                Wait(1000)
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
-                DeleteObject(DrillObject)
-    
+                DeleteEntity(DrillObject)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isOpened', true)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 TriggerServerEvent('qb-bankrobbery:server:recieveItem', 'small')
                 QBCore.Functions.Notify("Successful!", "success")
+                DrillObject = nil
                 IsDrilling = false
             else
                 StopAnimTask(PlayerPedId(), "anim@heists@fleeca_bank@drilling", "drill_straight_idle", 1.0)
                 DetachEntity(DrillObject, true, true)
-                DeleteObject(DrillObject)
-
-
+                DeleteEntity(DrillObject)
                 TriggerServerEvent('qb-bankrobbery:server:setLockerState', bankId, lockerId, 'isBusy', false)
                 QBCore.Functions.Notify("Canceled..", "error")
+                DrillObject = nil
                 IsDrilling = false
             end
         end)
@@ -266,7 +265,6 @@ function openLocker(bankId, lockerId) -- Globally Used
 end
 
 -- Events
-
 RegisterNetEvent('qb-bankrobbery:client:setBankState', function(bankId, state)
     if bankId == "paleto" then
         Config.BigBanks["paleto"]["isOpened"] = state
@@ -359,6 +357,7 @@ RegisterNetEvent('qb-bankrobbery:client:UseGreenLaptop', function(laptopData)-- 
                 if dist < 2.5 then
                     if CurrentCops >= Config.MinimumFleecaPolice then
                         if not Config.SmallBanks[closestBank]['isOpened'] then
+                            TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData) -- Removes a use from the laptop
                             SetEntityHeading(ped, Config.SmallBanks[closestBank]['coords'].w)
                             if math.random(1, 100) <= 65 and not IsWearingHandshoes() then
                                 TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
@@ -374,15 +373,13 @@ RegisterNetEvent('qb-bankrobbery:client:UseGreenLaptop', function(laptopData)-- 
                                 flags = 16,
                             }, {}, {}, function() -- Done
                                 StopAnimTask(PlayerPedId(), 'anim@gangops@facility@servers@', 'hotwire', 1.0)
-                                -- Removes a use from the laptop
-                                TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData)
                                 TriggerEvent('qb-bankrobbery:client:LaptopFleeca', closestBank)
                                 -- Police Alert
                                 if not copsCalled then
                                     if Config.SmallBanks[closestBank]["alarm"] then
                                         cameraId = Config.SmallBanks[closestBank]['camId']
                                         bank = 'Fleeca'
-                                        TriggerEvent('qb-dispatch:bankrobbery', bank, cameraId)
+                                        TriggerEvent('dispatch:fleeca:bankrobbery')
                                         copsCalled = true
                                     end
                                 end
@@ -464,14 +461,13 @@ RegisterNetEvent('qb-bankrobbery:client:LaptopFleeca', function()-- Fleeca Lapto
     end)
 end)
 RegisterNetEvent('qb-bankrobbery:client:UsePinkLaptop', function(laptopData) -- Practice Laptop
+    TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData) -- Removes a use from the laptop
     QBCore.Functions.Progressbar('hack_gate', 'Connecting the laptop..', math.random(15000, 30000), false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
         disableCombat = true,
     }, {}, {}, {}, function() -- Done
-        -- Removes a use from the laptop
-        TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData)
         -- Trigger Mini Game
         exports['hacking']:OpenHackingGame(Config.FleecaTime, Config.FleecaBlocks, Config.FleecaRepeat, function(bool)
             if bool then

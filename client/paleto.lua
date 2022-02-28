@@ -1,3 +1,4 @@
+-- Functions
 function OnPaletoHackDone(success)
     if success then
         TriggerEvent('qb-bankrobbery:client:SetUpPaletoTrolleys')
@@ -10,12 +11,6 @@ function OnPaletoHackDone(success)
 		QBCore.Functions.Notify("You Suck!", 'error')
 	end
 end
-
--- // TEST SHIT \\ --
-RegisterCommand('setupPaleto', function()
-    OnPaletoHackDone(true)
-end)
-
 function ThermitePaletoPlanting()
     RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
     RequestModel("hei_p_m_bag_var22_arm_s")
@@ -52,7 +47,6 @@ function ThermitePaletoPlanting()
         DeleteEntity(thermite)
     end)
 end
-
 function ThermitePaletoEffect()
     RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
     while not HasAnimDictLoaded("anim@heists@ornate_bank@thermal_charge") do
@@ -72,118 +66,8 @@ function ThermitePaletoEffect()
     TriggerServerEvent('qb-doorlock:server:updateState', Config.PaletoDoor2, false)
 end
 
-RegisterNetEvent('qb-bankrobbery:client:DrillPaletoLocker', function()
-    if Config.BigBanks["paleto"]["isOpened"] then
-        for k, v in pairs(Config.BigBanks["paleto"]["lockers"]) do
-            local ped = PlayerPedId()
-            local pos = GetEntityCoords(ped)
-            local lockerDist = #(pos - Config.BigBanks["paleto"]["lockers"][k]["coords"])
-            if not Config.BigBanks["paleto"]["lockers"][k]["isBusy"] then
-                if not Config.BigBanks["paleto"]["lockers"][k]["isOpened"] then
-                    if lockerDist < 5 then
-                        QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-                            if result then
-                                if CurrentCops >= Config.MinimumPaletoPolice then
-                                    -- EW CRUDE Need to figure out how to correct player positioning for the drilling animations
-                                    --[[
-                                        SetEntityCoords(ped, Config.BigBanks["paleto"]["lockers"][closestLocker]["coords"], 0, 0, 0, 0, false)
-                                        SetEntityHeading(ped, Config.BigBanks["paleto"]["lockers"][closestLocker]["heading"])
-                                    ]]
-                                    print("I get all the way herre!")
-                                    openLocker("paleto", k)
-                                else
-                                    QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
-                                end
-                            else
-                                QBCore.Functions.Notify('You need a drill bro!', "error")
-                            end
-                        end, 'drill')
-                    end
-                end
-            end
-        end
-    else
-        QBCore.Functions.Notify('How the hell are you here?!', "error")
-    end
-end)
-
-RegisterNetEvent('qb-bankrobbery:client:ThermitePaletoDoor', function()
-    local ped = PlayerPedId()
-    local pos = GetEntityCoords(ped)
-    if #(pos - vector3(Config.BigBanks["paleto"]["thermite"][1]["coords"].x, Config.BigBanks["paleto"]["thermite"][1]["coords"].y, Config.BigBanks["paleto"]["thermite"][1]["coords"].z)) < 10.0 then
-        if not Config.BigBanks["paleto"]["thermite"][1]["isOpened"] then
-            local dist = #(pos - vector3(Config.BigBanks["paleto"]["thermite"][1]["coords"].x, Config.BigBanks["paleto"]["thermite"][1]["coords"].y, Config.BigBanks["paleto"]["thermite"][1]["coords"].z))
-            if dist < 1 then
-                QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
-                    if result then
-                        if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
-                            TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
-                        end
-                        TriggerServerEvent('QBCore:Server:RemoveItem', 'thermite', 1)
-                        TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["thermite"], 'remove')
-                        ThermitePaletoPlanting()
-                        -- Thermite Game
-                        exports["memorygame"]:thermiteminigame(Config.ThermiteBlocks, Config.ThermiteAttempts, Config.ThermiteShow, Config.ThermiteTime,
-                        function()
-                            -- SUCCESS
-                            ThermitePaletoEffect()
-                        end,
-                        function()
-                            -- FAIL
-                            QBCore.Functions.Notify('You suck!', 'error', '5000')
-                        end)
-                    else
-                        QBCore.Functions.Notify('You don\'t have any thermite!', 'error', '5000')
-                    end
-                end, 'thermite')
-            end
-        end
-    end
-end)
-
-RegisterNetEvent('qb-bankrobbery:UseBankcardA', function()
-    local ped = PlayerPedId()
-    local pos = GetEntityCoords(ped)
-    local dist = #(pos - vector3(Config.BigBanks["paleto"]['coords'].x, Config.BigBanks["paleto"]['coords'].y, Config.BigBanks["paleto"]['coords'].z))
-    if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
-        TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
-    end
-    if dist < 2.0 then
-        if CurrentCops >= Config.MinimumPaletoPolice then
-            if Config.BigBanks["paleto"]["isOpened"] then
-                QBCore.Functions.Progressbar("security_pass", "Validitating card..", math.random(5000, 10000), false, true, {
-                    disableMovement = true,
-                    disableCarMovement = true,
-                    disableMouse = false,
-                    disableCombat = true,
-                }, {
-                    animDict = "anim@gangops@facility@servers@",
-                    anim = "hotwire",
-                    flags = 16,
-                }, {}, {}, function() -- Done
-                    StopAnimTask(ped, "anim@gangops@facility@servers@", "hotwire", 1.0)
-                    TriggerServerEvent("QBCore:Server:RemoveItem", "security_card_01", 1)
-                    TriggerServerEvent('qb-doorlock:server:updateState', Config.PaletoDoor1, false)
-                    if not copsCalled then
-                        if Config.BigBanks["paleto"]["alarm"] then
-                            cameraId = Config.BigBanks['paleto']['camId']
-                            bank = 'Paleto'
-                            TriggerEvent('qb-dispatch:bankrobbery', bank, cameraId)
-                            copsCalled = true
-                        end
-                    end
-                end)
-            else
-                QBCore.Functions.Notify("It looks like the bank is not opened..", "error")
-            end
-        else
-            QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
-        end
-    end
-end)
-
--- Laptop
-RegisterNetEvent('qb-bankrobbery:client:UseBlueLaptop', function(laptopData)
+-- Events
+RegisterNetEvent('qb-bankrobbery:client:UseBlueLaptop', function(laptopData) -- Laptop
     local ped = PlayerPedId()
     local pos = GetEntityCoords(ped)
     QBCore.Functions.TriggerCallback('qb-bankrobbery:server:isRobberyActive', function(isBusy)
@@ -192,6 +76,8 @@ RegisterNetEvent('qb-bankrobbery:client:UseBlueLaptop', function(laptopData)
             if dist < 2.5 then
                 if CurrentCops >= Config.MinimumPaletoPolice then
                     if not Config.BigBanks["paleto"]['isOpened'] then
+                        TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData) -- Removes a use from the laptop
+
                         SetEntityHeading(ped, Config.BigBanks["paleto"]['coords'].w)
                         if math.random(1, 100) <= 65 and not IsWearingHandshoes() then
                             TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
@@ -207,14 +93,12 @@ RegisterNetEvent('qb-bankrobbery:client:UseBlueLaptop', function(laptopData)
                             flags = 16,
                         }, {}, {}, function() -- Done
                             StopAnimTask(ped, 'anim@gangops@facility@servers@', 'hotwire', 1.0)
-                            -- Removes a use from the laptop
-                            TriggerServerEvent('qb-bankrobbery:server:RemoveLaptopUse', laptopData)
                             -- Police Alert
                             if not copsCalled then
                                 if Config.BigBanks["paleto"]["alarm"] then
                                     cameraId = Config.BigBanks["paleto"]['camId']
                                     bank = 'Paleto'
-                                    TriggerEvent('qb-dispatch:bankrobbery', bank, cameraId)
+                                    TriggerEvent('dispatch:bankrobbery', bank, cameraId)
                                     copsCalled = true
                                 end
                             end
@@ -235,7 +119,6 @@ RegisterNetEvent('qb-bankrobbery:client:UseBlueLaptop', function(laptopData)
         end
     end)
 end)
-
 RegisterNetEvent('qb-bankrobbery:client:LaptopPaleto', function()
     local loc = {x,y,z,h}
     loc.x = Config.BigBanks["paleto"]['coords'].x
@@ -296,9 +179,125 @@ RegisterNetEvent('qb-bankrobbery:client:LaptopPaleto', function()
         OnPaletoHackDone(bool)
     end)
 end)
+RegisterNetEvent('qb-bankrobbery:UseBankcardA', function()
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+    local dist = #(pos - vector3(Config.BigBanks["paleto"]['coords'].x, Config.BigBanks["paleto"]['coords'].y, Config.BigBanks["paleto"]['coords'].z))
+    if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
+        TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+    end
+    if dist < 2.0 then
+        if CurrentCops >= Config.MinimumPaletoPolice then
+            if Config.BigBanks["paleto"]["isOpened"] then
+                QBCore.Functions.Progressbar("security_pass", "Validitating card..", math.random(5000, 10000), false, true, {
+                    disableMovement = true,
+                    disableCarMovement = true,
+                    disableMouse = false,
+                    disableCombat = true,
+                }, {
+                    animDict = "anim@gangops@facility@servers@",
+                    anim = "hotwire",
+                    flags = 16,
+                }, {}, {}, function() -- Done
+                    StopAnimTask(ped, "anim@gangops@facility@servers@", "hotwire", 1.0)
+                    TriggerServerEvent("QBCore:Server:RemoveItem", "security_card_01", 1)
+                    TriggerServerEvent('qb-doorlock:server:updateState', Config.PaletoDoor1, false)
+                    if not copsCalled then
+                        if Config.BigBanks["paleto"]["alarm"] then
+                            cameraId = Config.BigBanks['paleto']['camId']
+                            bank = 'Paleto'
+                            TriggerEvent('dispatch:paleto:bankrobbery')
+                            copsCalled = true
+                        end
+                    end
+                end)
+            else
+                QBCore.Functions.Notify("It looks like the bank is not opened..", "error")
+            end
+        else
+            QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
+        end
+    end
+end)
+RegisterNetEvent('qb-bankrobbery:client:DrillPaletoLocker', function()
+    if Config.BigBanks["paleto"]["isOpened"] then
+        for k, v in pairs(Config.BigBanks["paleto"]["lockers"]) do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local lockerDist = #(pos - Config.BigBanks["paleto"]["lockers"][k]["coords"])
+            if not Config.BigBanks["paleto"]["lockers"][k]["isBusy"] then
+                if not Config.BigBanks["paleto"]["lockers"][k]["isOpened"] then
+                    if lockerDist < 5 then
+                        QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
+                            if result then
+                                if CurrentCops >= Config.MinimumPaletoPolice then
+                                    -- EW CRUDE Need to figure out how to correct player positioning for the drilling animations
+                                    --[[
+                                        SetEntityCoords(ped, Config.BigBanks["paleto"]["lockers"][closestLocker]["coords"], 0, 0, 0, 0, false)
+                                        SetEntityHeading(ped, Config.BigBanks["paleto"]["lockers"][closestLocker]["heading"])
+                                    ]]
+                                    openLocker("paleto", k)
+                                else
+                                    QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
+                                end
+                            else
+                                QBCore.Functions.Notify('You need a drill bro!', "error")
+                            end
+                        end, 'drill')
+                    end
+                end
+            end
+        end
+    else
+        QBCore.Functions.Notify('How the hell are you here?!', "error")
+    end
+end)
+RegisterNetEvent('qb-bankrobbery:client:ThermitePaletoDoor', function()
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+    if #(pos - vector3(Config.BigBanks["paleto"]["thermite"][1]["coords"].x, Config.BigBanks["paleto"]["thermite"][1]["coords"].y, Config.BigBanks["paleto"]["thermite"][1]["coords"].z)) < 10.0 then
+        if not Config.BigBanks["paleto"]["thermite"][1]["isOpened"] then
+            local dist = #(pos - vector3(Config.BigBanks["paleto"]["thermite"][1]["coords"].x, Config.BigBanks["paleto"]["thermite"][1]["coords"].y, Config.BigBanks["paleto"]["thermite"][1]["coords"].z))
+            if dist < 1 then
+                QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
+                    if result then
+                        if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
+                            TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+                        end
+                        TriggerServerEvent('QBCore:Server:RemoveItem', 'thermite', 1)
+                        TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["thermite"], 'remove')
+                        ThermitePaletoPlanting()
+                        -- Thermite Game
+                        exports["memorygame"]:thermiteminigame(Config.ThermiteBlocks, Config.ThermiteAttempts, Config.ThermiteShow, Config.ThermiteTime,
+                        function()
+                            -- SUCCESS
+                            ThermitePaletoEffect()
+                        end,
+                        function()
+                            -- FAIL
+                            QBCore.Functions.Notify('You suck!', 'error', '5000')
+                        end)
+                    else
+                        QBCore.Functions.Notify('You don\'t have any thermite!', 'error', '5000')
+                    end
+                end, 'thermite')
+            end
+        end
+    end
+end)
+RegisterNetEvent("qb-bankrobbery:client:ThermitePtfx", function(coords)-- Thermite Sparkles
+    RequestNamedPtfxAsset("scr_ornate_heist")
+    while not HasNamedPtfxAssetLoaded("scr_ornate_heist") do
+        Citizen.Wait(50)
+    end
+    SetPtfxAssetNextCall("scr_ornate_heist")
+    local effect = StartParticleFxLoopedAtCoord("scr_heist_ornate_thermal_burn", coords, 0.0, 0.0, 0.0, 1.0, false, false, false, false)
+    Citizen.Wait(10000)
+    StopParticleFxLooped(effect, 0)
+end)
 
--- Drill Spots
-CreateThread(function() 
+-- Threads
+CreateThread(function() -- Drill Spots
     for bank, _ in pairs(Config.BigBanks) do
         for k,v in pairs(Config.BigBanks["paleto"]['lockers']) do
             exports['qb-target']:AddBoxZone('PaletoLockers'..math.random(1,200), vector3(Config.BigBanks["paleto"]['lockers'][k]['coords'].x, Config.BigBanks["paleto"]['lockers'][k]['coords'].y, Config.BigBanks["paleto"]['lockers'][k]['coords'].z), 1.00, 0.80, {
@@ -321,9 +320,7 @@ CreateThread(function()
         end
     end
 end)
-
--- Thermite Spots
-CreateThread(function() 
+CreateThread(function() -- Thermite Spots
     for bank, _ in pairs(Config.BigBanks) do
         for k,v in pairs(Config.BigBanks["paleto"]['thermite']) do
             exports['qb-target']:AddBoxZone('PaletoThermite'..math.random(1,200), vector3(Config.BigBanks["paleto"]['thermite'][k]['coords'].x, Config.BigBanks["paleto"]['thermite'][k]['coords'].y, Config.BigBanks["paleto"]['thermite'][k]['coords'].z), 1.00, 0.80, {
@@ -347,14 +344,7 @@ CreateThread(function()
     end
 end)
 
--- Thermite Sparkles
-RegisterNetEvent("qb-bankrobbery:client:ThermitePtfx", function(coords)
-    RequestNamedPtfxAsset("scr_ornate_heist")
-    while not HasNamedPtfxAssetLoaded("scr_ornate_heist") do
-        Citizen.Wait(50)
-    end
-    SetPtfxAssetNextCall("scr_ornate_heist")
-    local effect = StartParticleFxLoopedAtCoord("scr_heist_ornate_thermal_burn", coords, 0.0, 0.0, 0.0, 1.0, false, false, false, false)
-    Citizen.Wait(10000)
-    StopParticleFxLooped(effect, 0)
+-- // TEST SHIT \\ --
+RegisterCommand('setupPaleto', function()
+    OnPaletoHackDone(true)
 end)
