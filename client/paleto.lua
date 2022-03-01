@@ -352,38 +352,19 @@ else
             local pos = GetEntityCoords(ped)
             local inRange = false
             if QBCore ~= nil then
-                    if Config.BigBanks["paleto"]["isOpened"] then
-                        for k, v in pairs(Config.BigBanks["paleto"]["lockers"]) do
-                            local lockerDist = #(pos - Config.BigBanks["paleto"]["lockers"][k]["coords"])
-                            if not Config.BigBanks["paleto"]["lockers"][k]["isBusy"] then
-                                if not Config.BigBanks["paleto"]["lockers"][k]["isOpened"] then
-                                    if lockerDist < 5 then
-                                        inRange = true
-                                        DrawMarker(2, Config.BigBanks["paleto"]["lockers"][k]["coords"].x, Config.BigBanks["paleto"]["lockers"][k]["coords"].y, Config.BigBanks["paleto"]["lockers"][k]["coords"].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.05, 255, 255, 255, 255, false, false, false, 1, false, false, false)
-                                        if lockerDist < 0.5 then
-                                            DrawText3Ds(Config.BigBanks["paleto"]["lockers"][k]["coords"].x, Config.BigBanks["paleto"]["lockers"][k]["coords"].y, Config.BigBanks["paleto"]["lockers"][k]["coords"].z + 0.3, '[E] Crack the vault')
-                                            if IsControlJustPressed(0, 38) then
-                                                if CurrentCops >= Config.MinimumPaletoPolice then
-                                                    openLocker("paleto", k)
-                                                else
-                                                    QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                        for k, v in pairs(Config.BigBanks["paleto"]["thermite"]) do
-                            local thermiteDist = #(pos - Config.BigBanks["paleto"]["thermite"][k]["coords"])
-                            if thermiteDist < 2 then
-                                inRange = true
-                                if thermiteDist < 1.0 then
-                                    if not Config.BigBanks["paleto"]["thermite"][k]["isOpened"] then
-                                        DrawText3Ds(Config.BigBanks["paleto"]['thermite'][k]['coords'].x, Config.BigBanks["paleto"]['thermite'][k]['coords'].y, Config.BigBanks["paleto"]['thermite'][k]['coords'].z, '[G] Blow Up Door')
-                                        if IsControlJustPressed(0, 58) then
+                if Config.BigBanks["paleto"]["isOpened"] then
+                    for k, v in pairs(Config.BigBanks["paleto"]["lockers"]) do
+                        local lockerDist = #(pos - Config.BigBanks["paleto"]["lockers"][k]["coords"])
+                        if not Config.BigBanks["paleto"]["lockers"][k]["isBusy"] then
+                            if not Config.BigBanks["paleto"]["lockers"][k]["isOpened"] then
+                                if lockerDist < 5 then
+                                    inRange = true
+                                    DrawMarker(2, Config.BigBanks["paleto"]["lockers"][k]["coords"].x, Config.BigBanks["paleto"]["lockers"][k]["coords"].y, Config.BigBanks["paleto"]["lockers"][k]["coords"].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.05, 255, 255, 255, 255, false, false, false, 1, false, false, false)
+                                    if lockerDist < 0.5 then
+                                        DrawText3Ds(Config.BigBanks["paleto"]["lockers"][k]["coords"].x, Config.BigBanks["paleto"]["lockers"][k]["coords"].y, Config.BigBanks["paleto"]["lockers"][k]["coords"].z + 0.3, '[E] Break open the safe')
+                                        if IsControlJustPressed(0, 38) then
                                             if CurrentCops >= Config.MinimumPaletoPolice then
-                                                TriggerEvent('qb-bankrobbery:client:ThermitePaletoDoor')
+                                                openLocker("paleto", k)
                                             else
                                                 QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
                                             end
@@ -393,6 +374,26 @@ else
                             end
                         end
                     end
+                end
+                for k, v in pairs(Config.BigBanks["paleto"]["thermite"]) do
+                    local thermiteDist = #(pos - Config.BigBanks["paleto"]["thermite"][k]["coords"])
+                    if thermiteDist < 2 then
+                        inRange = true
+                        if thermiteDist < 1.0 then
+                            if not Config.BigBanks["paleto"]["thermite"][k]["isOpened"] then
+                                DrawText3Ds(Config.BigBanks["paleto"]["thermite"][k]["coords"].x, Config.BigBanks["paleto"]["thermite"][k]["coords"].y, Config.BigBanks["paleto"]["thermite"][k]["coords"].z + 0.3, '[G] Blow Up Door')
+                                if IsControlJustPressed(0, 58) then
+                                    if CurrentCops >= Config.MinimumPaletoPolice then
+                                        door = k
+                                        TriggerEvent('qb-bankrobbery:client:ThermitePaletoDoor')
+                                    else
+                                        QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
                 if not inRange then
                     Wait(2500)
                 end
@@ -401,3 +402,7 @@ else
         end
     end)
 end
+
+RegisterCommand('setupPaleto', function()
+    OnPaletoHackDone(true)
+end)
