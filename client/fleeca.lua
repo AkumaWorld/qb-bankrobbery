@@ -697,25 +697,29 @@ else
             local pos = GetEntityCoords(ped)
             local inRange = false
             if QBCore ~= nil then
-                if Config.SmallBanks[closestBank]["isOpened"] then
-                    for k, v in pairs(Config.SmallBanks[closestBank]["trolleys"]) do
-                        local trolleyDist = #(pos - Config.SmallBanks[closestBank]["trolleys"][k]["coords"])
-                        if not Config.SmallBanks[closestBank]["trolleys"][k]["grabbed"] then
-                            if trolleyDist < 5 then
-                                inRange = true
-                                if trolleyDist < 1.5 then
-                                    DrawText3Ds(Config.SmallBanks[closestBank]["trolleys"][k]["coords"].x, Config.SmallBanks[closestBank]["trolleys"][k]["coords"].y, Config.SmallBanks[closestBank]["trolleys"][k]["coords"].z + 1.1, '[E] Loot')
-                                    if IsControlJustPressed(0, 38) then
-                                        if CurrentCops >= Config.MinimumFleecaPolice then
-                                            TriggerEvent("qb-bankrobbery:client:lootfleecatrolley")
-                                        else
-                                            QBCore.Functions.Notify('Minimum Of '..Config.MinimumFleecaPolice..' Police Needed', "error")
+                if closestBank ~= nil then
+                    if Config.SmallBanks[closestBank]["isOpened"] then
+                        for k, v in pairs(Config.SmallBanks[closestBank]["trolleys"]) do
+                            local trolleyDist = #(pos - Config.SmallBanks[closestBank]["trolleys"][k]["coords"])
+                            if not Config.SmallBanks[closestBank]["trolleys"][k]["grabbed"] then
+                                if trolleyDist < 5 then
+                                    inRange = true
+                                    if trolleyDist < 1.5 then
+                                        DrawText3Ds(Config.SmallBanks[closestBank]["trolleys"][k]["coords"].x, Config.SmallBanks[closestBank]["trolleys"][k]["coords"].y, Config.SmallBanks[closestBank]["trolleys"][k]["coords"].z + 1.1, '[E] Loot')
+                                        if IsControlJustPressed(0, 38) then
+                                            if CurrentCops >= Config.MinimumFleecaPolice then
+                                                TriggerEvent("qb-bankrobbery:client:lootfleecatrolley")
+                                            else
+                                                QBCore.Functions.Notify('Minimum Of '..Config.MinimumFleecaPolice..' Police Needed', "error")
+                                            end
                                         end
                                     end
                                 end
                             end
                         end
                     end
+                else
+                    Wait(2500)
                 end
                 if not inRange then
                     Wait(2500)

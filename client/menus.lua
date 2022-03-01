@@ -64,25 +64,50 @@ if Config.Laptops then
         SetEntityInvincible(created_ped, true)
         SetBlockingOfNonTemporaryEvents(created_ped, true)
         TaskStartScenarioInPlace(created_ped, 'WORLD_HUMAN_CLIPBOARD', 0, true)
-
-        -- Make Polyzone around Ped
-        exports['qb-target']:AddBoxZone('LaptopDude', vector3(Config.LaptopPedLoc.x, Config.LaptopPedLoc.y, Config.LaptopPedLoc.z), 0.75, 0.75, {  
-            name = 'LaptopDude', 
-            heading = 300.0,
-            debugPoly = false,
-            minZ = 21.30 - 1,
-            maxZ = 21.30 + 1.5,
-            }, {
-            options = { 
-            { 
-                type = 'client',
-                event = 'qb-bankrobbery:client:laptop_menu',
-                icon = 'fas fa-clipboard',
-                label = 'Buy Goods',
-            }
-            },
-            distance = 2.0,
-        })
-
+        if Config.Target then
+            -- Make Polyzone around Ped
+            exports['qb-target']:AddBoxZone('LaptopDude', vector3(Config.LaptopPedLoc.x, Config.LaptopPedLoc.y, Config.LaptopPedLoc.z), 0.75, 0.75, {  
+                name = 'LaptopDude', 
+                heading = 300.0,
+                debugPoly = false,
+                minZ = 21.30 - 1,
+                maxZ = 21.30 + 1.5,
+                }, {
+                options = { 
+                { 
+                    type = 'client',
+                    event = 'qb-bankrobbery:client:laptop_menu',
+                    icon = 'fas fa-clipboard',
+                    label = 'Buy Goods',
+                }
+                },
+                distance = 2.0,
+            })
+        else
+            CreateThread(function() -- Laptop Menu
+                Wait(2000)
+                while true do
+                    local ped = PlayerPedId()
+                    local pos = GetEntityCoords(ped)
+                    local inRange = false
+                    if QBCore ~= nil then
+                        local pedDist = #(pos - vector3(Config.LaptopPedLoc.x, Config.LaptopPedLoc.y, Config.LaptopPedLoc.z))
+                            if pedDist < 5 then
+                                inRange = true
+                                if pedDist < 1.5 then
+                                    DrawText3Ds(Config.LaptopPedLoc.x, Config.LaptopPedLoc.y, Config.LaptopPedLoc.z + 1.0, '[E] Buy')
+                                    if IsControlJustPressed(0, 38) then
+                                        TriggerEvent("qb-bankrobbery:client:laptop_menu")
+                                    end
+                                end
+                            end
+                        if not inRange then
+                            Wait(2500)
+                        end
+                    end
+                    Wait(1)
+                end
+            end)
+        end
     end)
 end
