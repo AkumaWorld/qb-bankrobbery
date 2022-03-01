@@ -374,6 +374,24 @@ else
                                 end
                             end
                         end
+                        for k, v in pairs(Config.BigBanks["paleto"]["thermite"]) do
+                            local thermiteDist = #(pos - Config.BigBanks["paleto"]["thermite"][k]["coords"])
+                            if thermiteDist < 2 then
+                                inRange = true
+                                if thermiteDist < 1.0 then
+                                    if not Config.BigBanks["paleto"]["thermite"][k]["isOpened"] then
+                                        DrawText3Ds(Config.BigBanks["paleto"]['thermite'][k]['coords'].x, Config.BigBanks["paleto"]['thermite'][k]['coords'].y, Config.BigBanks["paleto"]['thermite'][k]['coords'].z, '[G] Blow Up Door')
+                                        if IsControlJustPressed(0, 58) then
+                                            if CurrentCops >= Config.MinimumPaletoPolice then
+                                                TriggerEvent('qb-bankrobbery:client:ThermitePaletoDoor')
+                                            else
+                                                QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
                     end
                 if not inRange then
                     Wait(2500)

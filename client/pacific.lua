@@ -372,6 +372,39 @@ if Config.Target then
         end
     end)
 else
+    RegisterNetEvent('qb-bankrobbery:client:ThermitePacificDoorText', function(door)
+        local ped = PlayerPedId()
+        local pos = GetEntityCoords(ped)
+        if #(pos - vector3(Config.BigBanks["pacific"]["thermite"][door]["coords"].x, Config.BigBanks["pacific"]["thermite"][door]["coords"].y, Config.BigBanks["pacific"]["thermite"][door]["coords"].z)) < 10.0 then
+            if not Config.BigBanks["pacific"]["thermite"][door]["isOpened"] then
+                local dist = #(pos - vector3(Config.BigBanks["pacific"]["thermite"][door]["coords"].x, Config.BigBanks["pacific"]["thermite"][door]["coords"].y, Config.BigBanks["pacific"]["thermite"][door]["coords"].z))
+                if dist < 1 then
+                    QBCore.Functions.TriggerCallback('QBCore:HasItem', function(result)
+                        if result then
+                            if math.random(1, 100) <= 85 and not IsWearingHandshoes() then
+                                TriggerServerEvent("evidence:server:CreateFingerDrop", pos)
+                            end
+                            TriggerServerEvent('QBCore:Server:RemoveItem', 'thermite', 1)
+                            TriggerEvent('inventory:client:ItemBox', QBCore.Shared.Items["thermite"], 'remove')
+                            ThermitePacificPlanting(door)
+                            -- Thermite Game
+                            exports["memorygame"]:thermiteminigame(Config.ThermiteBlocks, Config.ThermiteAttempts, Config.ThermiteShow, Config.ThermiteTime,
+                            function()
+                                -- SUCCESS
+                                ThermitePacificEffect(door)
+                            end,
+                            function()
+                                -- FAIL
+                                QBCore.Functions.Notify('You suck!', 'error', '5000')
+                            end)
+                        else
+                            QBCore.Functions.Notify('You don\'t have any thermite!', 'error', '5000')
+                        end
+                    end, 'thermite')
+                end
+            end
+        end
+    end)
     CreateThread(function() -- Drill Spots
         Wait(2000)
         while true do
@@ -396,6 +429,25 @@ else
                                                 QBCore.Functions.Notify('Minimum Of '..Config.MinimumPacificPolice..' Police Needed', "error")
                                             end
                                         end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                for k, v in pairs(Config.BigBanks["pacific"]["thermite"]) do
+                    local thermiteDist = #(pos - Config.BigBanks["pacific"]["thermite"][k]["coords"])
+                    if thermiteDist < 2 then
+                        inRange = true
+                        if thermiteDist < 1.0 then
+                            if not Config.BigBanks["pacific"]["thermite"][k]["isOpened"] then
+                                DrawText3Ds(Config.BigBanks["pacific"]["thermite"][k]["coords"].x, Config.BigBanks["pacific"]["thermite"][k]["coords"].y, Config.BigBanks["pacific"]["thermite"][k]["coords"].z + 0.3, '[G] Blow Up Door')
+                                if IsControlJustPressed(0, 58) then
+                                    if CurrentCops >= Config.MinimumPacificPolice then
+                                        door = k
+                                        TriggerEvent('qb-bankrobbery:client:ThermitePacificDoorText', door)
+                                    else
+                                        QBCore.Functions.Notify('Minimum Of '..Config.MinimumPacificPolice..' Police Needed', "error")
                                     end
                                 end
                             end

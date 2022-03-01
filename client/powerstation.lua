@@ -83,24 +83,51 @@ RegisterNetEvent('qb-bankrobbery:client:SetStationStatus', function(key, isHit)
 end)
 
 -- Threads
-CreateThread(function() 
-    for k,v in pairs(Config.PowerStations) do
-      exports['qb-target']:AddBoxZone('PowerStation'..math.random(1,20), vector3(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z), 1.5, 1.5, {
-          name = 'PowerStation'..math.random(1,20), 
-          heading = Config.PowerStations[k]['coords'].w,
-          debugPoly = Config.DebugPoly,
-          minZ = Config.PowerStations[k]['coords'].z-1,
-          maxZ = Config.PowerStations[k]['coords'].z+2,
-          }, {
-          options = {
-          { 
-              type = 'client',
-              event = 'thermite:UseThermite',
-              icon = 'fas fa-bomb',
-              label = 'Blow Up',
-          }
-          },
-          distance = 1.5,
-      })
-    end
-end)
+if Config.Target then
+    CreateThread(function() 
+        for k,v in pairs(Config.PowerStations) do
+        exports['qb-target']:AddBoxZone('PowerStation'..math.random(1,20), vector3(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z), 1.5, 1.5, {
+            name = 'PowerStation'..math.random(1,20), 
+            heading = Config.PowerStations[k]['coords'].w,
+            debugPoly = Config.DebugPoly,
+            minZ = Config.PowerStations[k]['coords'].z-1,
+            maxZ = Config.PowerStations[k]['coords'].z+2,
+            }, {
+            options = {
+            { 
+                type = 'client',
+                event = 'thermite:UseThermite',
+                icon = 'fas fa-bomb',
+                label = 'Blow Up',
+            }
+            },
+            distance = 1.5,
+        })
+        end
+    end)
+else
+    CreateThread(function()
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            for k , v in pairs(Config.PowerStations) do
+                local Dist = #(pos - vector3(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z))
+                if Dist <= 2.5 then
+                    inRange = true
+                    if not v['hit'] then
+                        DrawText3Ds(Config.PowerStations[k]['coords'].x, Config.PowerStations[k]['coords'].y, Config.PowerStations[k]['coords'].z, '[G] Blow Up')
+                        if IsControlJustPressed(0, 58) then     
+                            TriggerEvent('thermite:UseThermite')
+                        end
+                    end
+                end
+                if not inRange then
+                    Wait(2500)
+                end
+            end
+            Wait(1)
+        end
+    end)
+end
