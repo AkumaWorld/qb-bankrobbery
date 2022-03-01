@@ -1,5 +1,6 @@
 Config = Config or {}
 
+Config.Target = true
 Config.DebugPoly = false
 
 Config.ItemTiers = 1

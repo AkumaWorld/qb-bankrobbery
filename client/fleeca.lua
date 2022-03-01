@@ -32,6 +32,20 @@ local function ResetBankDoors()
         SetEntityHeading(pacificObject, Config.BigBanks["pacific"]["heading"].open)
     end
 end
+function DrawText3Ds(x, y, z, text) -- Globally used
+	SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(true)
+    AddTextComponentString(text)
+    SetDrawOrigin(x,y,z, 0)
+    DrawText(0.0, 0.0)
+    local factor = (string.len(text)) / 370
+    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
+    ClearDrawOrigin()
+end
 
 -- Handlers
 AddEventHandler('onResourceStop', function(resource)
@@ -544,44 +558,108 @@ CreateThread(function()
     end
 end)
 
--- qb-target exports
-CreateThread(function() -- Fleeca Drill Spots
-    for fweecybwo, _ in pairs(Config.SmallBanks) do
-        for k,v in pairs(Config.SmallBanks[fweecybwo]['lockers']) do
-            exports['qb-target']:AddBoxZone('FleecaLockers'..math.random(1,200), vector3(Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].x, Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].y, Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z), 1.00, 0.80, {
-                name = 'FleecaLockers'..math.random(1,200), 
-                heading = Config.SmallBanks[fweecybwo]['lockers'][k]['heading'],
-                debugPoly = Config.DebugPoly,
-                minZ = Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z-1,
-                maxZ = Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z+2,
-                }, {
-                options = {
+-- Threads
+if Config.Target then
+        CreateThread(function() -- Fleeca Drill Spots
+            for fweecybwo, _ in pairs(Config.SmallBanks) do
+                for k,v in pairs(Config.SmallBanks[fweecybwo]['lockers']) do
+                    exports['qb-target']:AddBoxZone('FleecaLockers'..math.random(1,200), vector3(Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].x, Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].y, Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z), 1.00, 0.80, {
+                        name = 'FleecaLockers'..math.random(1,200), 
+                        heading = Config.SmallBanks[fweecybwo]['lockers'][k]['heading'],
+                        debugPoly = Config.DebugPoly,
+                        minZ = Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z-1,
+                        maxZ = Config.SmallBanks[fweecybwo]['lockers'][k]['coords'].z+2,
+                        }, {
+                        options = {
+                            { 
+                                type = 'client',
+                                event = 'qb-bankrobbery:client:DrillSmallLocker',
+                                icon = 'fas fa-bomb',
+                                label = 'Drill Locker',
+                            }
+                        },
+                        distance = 1.5,
+                    })
+                end
+            end
+        end)
+else
+    CreateThread(function()
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            if QBCore ~= nil then
+                if closestBank ~= nil then
+                    if Config.SmallBanks[closestBank]["isOpened"] then
+                        for k, v in pairs(Config.SmallBanks[closestBank]["lockers"]) do
+                            local lockerDist = #(pos - Config.SmallBanks[closestBank]["lockers"][k]["coords"])
+                            if not Config.SmallBanks[closestBank]["lockers"][k]["isBusy"] then
+                                if not Config.SmallBanks[closestBank]["lockers"][k]["isOpened"] then
+                                    if lockerDist < 5 then
+                                        DrawMarker(2, Config.SmallBanks[closestBank]["lockers"][k]["coords"].x, Config.SmallBanks[closestBank]["lockers"][k]["coords"].y, Config.SmallBanks[closestBank]["lockers"][k]["coords"].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.05, 255, 255, 255, 255, false, false, false, 1, false, false, false)
+                                        if lockerDist < 0.5 then
+                                            DrawText3Ds(Config.SmallBanks[closestBank]["lockers"][k]["coords"].x, Config.SmallBanks[closestBank]["lockers"][k]["coords"].y, Config.SmallBanks[closestBank]["lockers"][k]["coords"].z + 0.3, '[E] Break open the safe')
+                                            if IsControlJustPressed(0, 38) then
+                                                if CurrentCops >= Config.MinimumFleecaPolice then
+                                                    openLocker(closestBank, k)
+                                                else
+                                                    QBCore.Functions.Notify('Minimum Of '..Config.MinimumFleecaPolice..' Police Needed', "error")
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                else
+                    Wait(2500)
+                end
+            end
+    
+            Wait(1)
+        end
+    end)
+end
+-- Trolleys
+if Config.Target then
+    CreateThread(function() -- Trolleys
+        for fweecybwo, _ in pairs(Config.SmallBanks) do
+            for k,v in pairs(Config.SmallBanks[fweecybwo]['trolleys']) do
+                exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].x, Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].y, Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
+                    name = 'Trolley'..math.random(1,100), 
+                    heading = Config.SmallBanks[fweecybwo]['trolleys'][k]['heading'],
+                    debugPoly = Config.DebugPoly,
+                    minZ = Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z-1,
+                    maxZ = Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z+1.5,
+                    }, {
+                    options = { 
                     { 
                         type = 'client',
-                        event = 'qb-bankrobbery:client:DrillSmallLocker',
-                        icon = 'fas fa-bomb',
-                        label = 'Drill Locker',
+                        event = 'qb-bankrobbery:client:lootfleecatrolley',
+                        icon = 'fas fa-hand-paper',
+                        label = 'Grab',
                     }
-                },
-                distance = 1.5,
-            })
+                    },
+                    distance = 2.0,
+                })
+            end
         end
-    end
-end)
-CreateThread(function() -- Trolleys
-    for fweecybwo, _ in pairs(Config.SmallBanks) do
-        for k,v in pairs(Config.SmallBanks[fweecybwo]['trolleys']) do
-            exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].x, Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].y, Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
+    end)
+    CreateThread(function() -- Trolleys Paleto
+        for k,v in pairs(Config.BigBanks["paleto"]['trolleys']) do
+            exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.BigBanks["paleto"]['trolleys'][k]['coords'].x, Config.BigBanks["paleto"]['trolleys'][k]['coords'].y, Config.BigBanks["paleto"]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
                 name = 'Trolley'..math.random(1,100), 
-                heading = Config.SmallBanks[fweecybwo]['trolleys'][k]['heading'],
+                heading = Config.BigBanks["paleto"]['trolleys'][k]['heading'],
                 debugPoly = Config.DebugPoly,
-                minZ = Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z-1,
-                maxZ = Config.SmallBanks[fweecybwo]['trolleys'][k]['coords'].z+1.5,
+                minZ = Config.BigBanks["paleto"]['trolleys'][k]['coords'].z-1,
+                maxZ = Config.BigBanks["paleto"]['trolleys'][k]['coords'].z+1.5,
                 }, {
                 options = { 
                 { 
                     type = 'client',
-                    event = 'qb-bankrobbery:client:lootfleecatrolley',
+                    event = 'qb-bankrobbery:client:lootpaletotrolley',
                     icon = 'fas fa-hand-paper',
                     label = 'Grab',
                 }
@@ -589,50 +667,132 @@ CreateThread(function() -- Trolleys
                 distance = 2.0,
             })
         end
-    end
-end)
-CreateThread(function() -- Trolleys Paleto
-    for k,v in pairs(Config.BigBanks["paleto"]['trolleys']) do
-        exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.BigBanks["paleto"]['trolleys'][k]['coords'].x, Config.BigBanks["paleto"]['trolleys'][k]['coords'].y, Config.BigBanks["paleto"]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
-            name = 'Trolley'..math.random(1,100), 
-            heading = Config.BigBanks["paleto"]['trolleys'][k]['heading'],
-            debugPoly = Config.DebugPoly,
-            minZ = Config.BigBanks["paleto"]['trolleys'][k]['coords'].z-1,
-            maxZ = Config.BigBanks["paleto"]['trolleys'][k]['coords'].z+1.5,
-            }, {
-            options = { 
-            { 
-                type = 'client',
-                event = 'qb-bankrobbery:client:lootpaletotrolley',
-                icon = 'fas fa-hand-paper',
-                label = 'Grab',
-            }
-            },
-            distance = 2.0,
-        })
-    end
-end)
-CreateThread(function() -- Trolleys Pacific
-    for k,v in pairs(Config.BigBanks["pacific"]['trolleys']) do
-        exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.BigBanks["pacific"]['trolleys'][k]['coords'].x, Config.BigBanks["pacific"]['trolleys'][k]['coords'].y, Config.BigBanks["pacific"]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
-            name = 'Trolley'..math.random(1,100), 
-            heading = Config.BigBanks["pacific"]['trolleys'][k]['heading'],
-            debugPoly = Config.DebugPoly,
-            minZ = Config.BigBanks["pacific"]['trolleys'][k]['coords'].z-1,
-            maxZ = Config.BigBanks["pacific"]['trolleys'][k]['coords'].z+1.5,
-            }, {
-            options = { 
-            { 
-                type = 'client',
-                event = 'qb-bankrobbery:client:lootpacifictrolley',
-                icon = 'fas fa-hand-paper',
-                label = 'Grab',
-            }
-            },
-            distance = 2.0,
-        })
-    end
-end)
+    end)
+    CreateThread(function() -- Trolleys Pacific
+        for k,v in pairs(Config.BigBanks["pacific"]['trolleys']) do
+            exports['qb-target']:AddBoxZone('Trolley'..math.random(1,100), vector3(Config.BigBanks["pacific"]['trolleys'][k]['coords'].x, Config.BigBanks["pacific"]['trolleys'][k]['coords'].y, Config.BigBanks["pacific"]['trolleys'][k]['coords'].z), 0.9, 1.1, {  
+                name = 'Trolley'..math.random(1,100), 
+                heading = Config.BigBanks["pacific"]['trolleys'][k]['heading'],
+                debugPoly = Config.DebugPoly,
+                minZ = Config.BigBanks["pacific"]['trolleys'][k]['coords'].z-1,
+                maxZ = Config.BigBanks["pacific"]['trolleys'][k]['coords'].z+1.5,
+                }, {
+                options = { 
+                { 
+                    type = 'client',
+                    event = 'qb-bankrobbery:client:lootpacifictrolley',
+                    icon = 'fas fa-hand-paper',
+                    label = 'Grab',
+                }
+                },
+                distance = 2.0,
+            })
+        end
+    end)
+else
+    CreateThread(function() -- Trolleys Fleeca
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            if QBCore ~= nil then
+                if Config.SmallBanks[closestBank]["isOpened"] then
+                    for k, v in pairs(Config.SmallBanks[closestBank]["trolleys"]) do
+                        local trolleyDist = #(pos - Config.SmallBanks[closestBank]["trolleys"][k]["coords"])
+                        if not Config.SmallBanks[closestBank]["trolleys"][k]["grabbed"] then
+                            if trolleyDist < 5 then
+                                inRange = true
+                                if trolleyDist < 1.5 then
+                                    DrawText3Ds(Config.SmallBanks[closestBank]["trolleys"][k]["coords"].x, Config.SmallBanks[closestBank]["trolleys"][k]["coords"].y, Config.SmallBanks[closestBank]["trolleys"][k]["coords"].z + 1.1, '[E] Loot')
+                                    if IsControlJustPressed(0, 38) then
+                                        if CurrentCops >= Config.MinimumFleecaPolice then
+                                            TriggerEvent("qb-bankrobbery:client:lootfleecatrolley")
+                                        else
+                                            QBCore.Functions.Notify('Minimum Of '..Config.MinimumFleecaPolice..' Police Needed', "error")
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if not inRange then
+                    Wait(2500)
+                end
+            end
+            Wait(1)
+        end
+    end)
+    CreateThread(function() -- Trolleys Paleto
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            if QBCore ~= nil then
+                if Config.BigBanks["paleto"]["isOpened"] then
+                    for k, v in pairs(Config.BigBanks["paleto"]["trolleys"]) do
+                        local trolleyDist = #(pos - Config.BigBanks["paleto"]["trolleys"][k]["coords"])
+                        if not Config.BigBanks["paleto"]["trolleys"][k]["grabbed"] then
+                            if trolleyDist < 5 then
+                                inRange = true
+                                if trolleyDist < 1.5 then
+                                    DrawText3Ds(Config.BigBanks["paleto"]["trolleys"][k]["coords"].x, Config.BigBanks["paleto"]["trolleys"][k]["coords"].y, Config.BigBanks["paleto"]["trolleys"][k]["coords"].z + 1.1, '[E] Loot')
+                                    if IsControlJustPressed(0, 38) then
+                                        if CurrentCops >= Config.MinimumPaletoPolice then
+                                            TriggerEvent("qb-bankrobbery:client:lootpaletotrolley")
+                                        else
+                                            QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if not inRange then
+                    Wait(2500)
+                end
+            end
+            Wait(1)
+        end
+    end)
+    CreateThread(function() -- Trolleys Pacific
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            if QBCore ~= nil then
+                if Config.BigBanks["pacific"]["isOpened"] then
+                    for k, v in pairs(Config.BigBanks["pacific"]["trolleys"]) do
+                        local trolleyDist = #(pos - Config.BigBanks["pacific"]["trolleys"][k]["coords"])
+                        if not Config.BigBanks["pacific"]["trolleys"][k]["grabbed"] then
+                            if trolleyDist < 5 then
+                                inRange = true
+                                if trolleyDist < 1.5 then
+                                    DrawText3Ds(Config.BigBanks["pacific"]["trolleys"][k]["coords"].x, Config.BigBanks["pacific"]["trolleys"][k]["coords"].y, Config.BigBanks["pacific"]["trolleys"][k]["coords"].z + 1.1, '[E] Loot')
+                                    if IsControlJustPressed(0, 38) then
+                                        if CurrentCops >= Config.MinimumPacificPolice then
+                                            TriggerEvent("qb-bankrobbery:client:lootpacifictrolley")
+                                        else
+                                            QBCore.Functions.Notify('Minimum Of '..Config.MinimumPacificPolice..' Police Needed', "error")
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if not inRange then
+                    Wait(2500)
+                end
+            end
+            Wait(1)
+        end
+    end)
+end
 
 -- // Trolley Events \\ --
 -- Fleeca

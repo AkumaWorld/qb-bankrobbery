@@ -322,51 +322,91 @@ RegisterNetEvent('qb-bankrobbery:client:ThermitePacificDoor', function(data)
 end)
 
 -- Threads
-CreateThread(function() -- Drill Spots
-    for bank, _ in pairs(Config.BigBanks) do
-        for k,v in pairs(Config.BigBanks["pacific"]['lockers']) do
-            exports['qb-target']:AddBoxZone('PacificLockers'..math.random(1,200), vector3(Config.BigBanks["pacific"]['lockers'][k]['coords'].x, Config.BigBanks["pacific"]['lockers'][k]['coords'].y, Config.BigBanks["pacific"]['lockers'][k]['coords'].z), 1.00, 0.80, {
-                name = 'PacificLockers'..math.random(1,200), 
-                heading = Config.BigBanks["pacific"]['lockers'][k]['heading'],
-                debugPoly = Config.DebugPoly,
-                minZ = Config.BigBanks["pacific"]['lockers'][k]['coords'].z-1,
-                maxZ = Config.BigBanks["pacific"]['lockers'][k]['coords'].z+2,
-                }, {
-                options = {
-                    { 
-                        type = 'client',
-                        event = 'qb-bankrobbery:client:DrillPacificLocker',
-                        icon = 'fas fa-bomb',
-                        label = 'Drill Locker',
-                        locker = k
-                    }
-                },
-                distance = 0.75,
-            })
+if Config.Target then
+    CreateThread(function() -- Drill Spots
+        for bank, _ in pairs(Config.BigBanks) do
+            for k,v in pairs(Config.BigBanks["pacific"]['lockers']) do
+                exports['qb-target']:AddBoxZone('PacificLockers'..math.random(1,200), vector3(Config.BigBanks["pacific"]['lockers'][k]['coords'].x, Config.BigBanks["pacific"]['lockers'][k]['coords'].y, Config.BigBanks["pacific"]['lockers'][k]['coords'].z), 1.00, 0.80, {
+                    name = 'PacificLockers'..math.random(1,200), 
+                    heading = Config.BigBanks["pacific"]['lockers'][k]['heading'],
+                    debugPoly = Config.DebugPoly,
+                    minZ = Config.BigBanks["pacific"]['lockers'][k]['coords'].z-1,
+                    maxZ = Config.BigBanks["pacific"]['lockers'][k]['coords'].z+2,
+                    }, {
+                    options = {
+                        { 
+                            type = 'client',
+                            event = 'qb-bankrobbery:client:DrillPacificLocker',
+                            icon = 'fas fa-bomb',
+                            label = 'Drill Locker',
+                            locker = k
+                        }
+                    },
+                    distance = 0.75,
+                })
+            end
         end
-    end
-end)
-CreateThread(function() -- Thermite Spots
-    for bank, _ in pairs(Config.BigBanks) do
-        for k,v in pairs(Config.BigBanks["pacific"]['thermite']) do
-            exports['qb-target']:AddBoxZone('PacificThermite'..math.random(1,200), vector3(Config.BigBanks["pacific"]['thermite'][k]['coords'].x, Config.BigBanks["pacific"]['thermite'][k]['coords'].y, Config.BigBanks["pacific"]['thermite'][k]['coords'].z), 1.00, 0.80, {
-                name = 'PacificThermite'..math.random(1,200), 
-                heading = Config.BigBanks["pacific"]['thermite'][k]['heading'],
-                debugPoly = Config.DebugPoly,
-                minZ = Config.BigBanks["pacific"]['thermite'][k]['coords'].z-1,
-                maxZ = Config.BigBanks["pacific"]['thermite'][k]['coords'].z+2,
-                }, {
-                options = {
-                    { 
-                        type = 'client',
-                        event = 'qb-bankrobbery:client:ThermitePacificDoor',
-                        icon = 'fas fa-bomb',
-                        label = 'Blow Door',
-                        door = k,
-                    }
-                },
-                distance = 1.5,
-            })
+    end)
+    CreateThread(function() -- Thermite Spots
+        for bank, _ in pairs(Config.BigBanks) do
+            for k,v in pairs(Config.BigBanks["pacific"]['thermite']) do
+                exports['qb-target']:AddBoxZone('PacificThermite'..math.random(1,200), vector3(Config.BigBanks["pacific"]['thermite'][k]['coords'].x, Config.BigBanks["pacific"]['thermite'][k]['coords'].y, Config.BigBanks["pacific"]['thermite'][k]['coords'].z), 1.00, 0.80, {
+                    name = 'PacificThermite'..math.random(1,200), 
+                    heading = Config.BigBanks["pacific"]['thermite'][k]['heading'],
+                    debugPoly = Config.DebugPoly,
+                    minZ = Config.BigBanks["pacific"]['thermite'][k]['coords'].z-1,
+                    maxZ = Config.BigBanks["pacific"]['thermite'][k]['coords'].z+2,
+                    }, {
+                    options = {
+                        { 
+                            type = 'client',
+                            event = 'qb-bankrobbery:client:ThermitePacificDoor',
+                            icon = 'fas fa-bomb',
+                            label = 'Blow Door',
+                            door = k,
+                        }
+                    },
+                    distance = 1.5,
+                })
+            end
         end
-    end
-end)
+    end)
+else
+    CreateThread(function() -- Drill Spots
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            if QBCore ~= nil then
+                if Config.BigBanks["pacific"]["isOpened"] then
+                    for k, v in pairs(Config.BigBanks["pacific"]["lockers"]) do
+                        local lockerDist = #(pos - Config.BigBanks["pacific"]["lockers"][k]["coords"])
+                        if not Config.BigBanks["pacific"]["lockers"][k]["isBusy"] then
+                            if not Config.BigBanks["pacific"]["lockers"][k]["isOpened"] then
+                                if lockerDist < 5 then
+                                    inRange = true
+                                    DrawMarker(2, Config.BigBanks["pacific"]["lockers"][k]["coords"].x, Config.BigBanks["pacific"]["lockers"][k]["coords"].y, Config.BigBanks["pacific"]["lockers"][k]["coords"].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.05, 255, 255, 255, 255, false, false, false, 1, false, false, false)
+                                    if lockerDist < 0.5 then
+                                        DrawText3Ds(Config.BigBanks["pacific"]["lockers"][k]["coords"].x, Config.BigBanks["pacific"]["lockers"][k]["coords"].y, Config.BigBanks["pacific"]["lockers"][k]["coords"].z + 0.3, '[E] Break open the safe')
+                                        if IsControlJustPressed(0, 38) then
+                                            if CurrentCops >= Config.MinimumPacificPolice then
+                                                openLocker("pacific", k)
+                                            else
+                                                QBCore.Functions.Notify('Minimum Of '..Config.MinimumPacificPolice..' Police Needed', "error")
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+                if not inRange then
+                    Wait(2500)
+                end
+            end
+            Wait(1)
+        end
+    end)
+end

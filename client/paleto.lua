@@ -297,49 +297,89 @@ RegisterNetEvent("qb-bankrobbery:client:ThermitePtfx", function(coords)-- Thermi
 end)
 
 -- Threads
-CreateThread(function() -- Drill Spots
-    for bank, _ in pairs(Config.BigBanks) do
-        for k,v in pairs(Config.BigBanks["paleto"]['lockers']) do
-            exports['qb-target']:AddBoxZone('PaletoLockers'..math.random(1,200), vector3(Config.BigBanks["paleto"]['lockers'][k]['coords'].x, Config.BigBanks["paleto"]['lockers'][k]['coords'].y, Config.BigBanks["paleto"]['lockers'][k]['coords'].z), 1.00, 0.80, {
-                name = 'PaletoLockers'..math.random(1,200), 
-                heading = Config.BigBanks["paleto"]['lockers'][k]['heading'],
-                debugPoly = Config.DebugPoly,
-                minZ = Config.BigBanks["paleto"]['lockers'][k]['coords'].z-1,
-                maxZ = Config.BigBanks["paleto"]['lockers'][k]['coords'].z+2,
-                }, {
-                options = {
-                    { 
-                        type = 'client',
-                        event = 'qb-bankrobbery:client:DrillPaletoLocker',
-                        icon = 'fas fa-bomb',
-                        label = 'Drill Locker',
-                    }
-                },
-                distance = 1.5,
-            })
+if Config.Target then
+    CreateThread(function() -- Drill Spots
+        for bank, _ in pairs(Config.BigBanks) do
+            for k,v in pairs(Config.BigBanks["paleto"]['lockers']) do
+                exports['qb-target']:AddBoxZone('PaletoLockers'..math.random(1,200), vector3(Config.BigBanks["paleto"]['lockers'][k]['coords'].x, Config.BigBanks["paleto"]['lockers'][k]['coords'].y, Config.BigBanks["paleto"]['lockers'][k]['coords'].z), 1.00, 0.80, {
+                    name = 'PaletoLockers'..math.random(1,200), 
+                    heading = Config.BigBanks["paleto"]['lockers'][k]['heading'],
+                    debugPoly = Config.DebugPoly,
+                    minZ = Config.BigBanks["paleto"]['lockers'][k]['coords'].z-1,
+                    maxZ = Config.BigBanks["paleto"]['lockers'][k]['coords'].z+2,
+                    }, {
+                    options = {
+                        { 
+                            type = 'client',
+                            event = 'qb-bankrobbery:client:DrillPaletoLocker',
+                            icon = 'fas fa-bomb',
+                            label = 'Drill Locker',
+                        }
+                    },
+                    distance = 1.5,
+                })
+            end
         end
-    end
-end)
-CreateThread(function() -- Thermite Spots
-    for bank, _ in pairs(Config.BigBanks) do
-        for k,v in pairs(Config.BigBanks["paleto"]['thermite']) do
-            exports['qb-target']:AddBoxZone('PaletoThermite'..math.random(1,200), vector3(Config.BigBanks["paleto"]['thermite'][k]['coords'].x, Config.BigBanks["paleto"]['thermite'][k]['coords'].y, Config.BigBanks["paleto"]['thermite'][k]['coords'].z), 1.00, 0.80, {
-                name = 'PaletoThermite'..math.random(1,200), 
-                heading = Config.BigBanks["paleto"]['thermite'][k]['heading'],
-                debugPoly = Config.DebugPoly,
-                minZ = Config.BigBanks["paleto"]['thermite'][k]['coords'].z-1,
-                maxZ = Config.BigBanks["paleto"]['thermite'][k]['coords'].z+2,
-                }, {
-                options = {
-                    { 
-                        type = 'client',
-                        event = 'qb-bankrobbery:client:ThermitePaletoDoor',
-                        icon = 'fas fa-bomb',
-                        label = 'Blow Door',
-                    }
-                },
-                distance = 1.5,
-            })
+    end)
+    CreateThread(function() -- Thermite Spots
+        for bank, _ in pairs(Config.BigBanks) do
+            for k,v in pairs(Config.BigBanks["paleto"]['thermite']) do
+                exports['qb-target']:AddBoxZone('PaletoThermite'..math.random(1,200), vector3(Config.BigBanks["paleto"]['thermite'][k]['coords'].x, Config.BigBanks["paleto"]['thermite'][k]['coords'].y, Config.BigBanks["paleto"]['thermite'][k]['coords'].z), 1.00, 0.80, {
+                    name = 'PaletoThermite'..math.random(1,200), 
+                    heading = Config.BigBanks["paleto"]['thermite'][k]['heading'],
+                    debugPoly = Config.DebugPoly,
+                    minZ = Config.BigBanks["paleto"]['thermite'][k]['coords'].z-1,
+                    maxZ = Config.BigBanks["paleto"]['thermite'][k]['coords'].z+2,
+                    }, {
+                    options = {
+                        { 
+                            type = 'client',
+                            event = 'qb-bankrobbery:client:ThermitePaletoDoor',
+                            icon = 'fas fa-bomb',
+                            label = 'Blow Door',
+                        }
+                    },
+                    distance = 1.5,
+                })
+            end
         end
-    end
-end)
+    end)
+else
+    CreateThread(function() -- Drill Spots
+        Wait(2000)
+        while true do
+            local ped = PlayerPedId()
+            local pos = GetEntityCoords(ped)
+            local inRange = false
+            if QBCore ~= nil then
+                    if Config.BigBanks["paleto"]["isOpened"] then
+                        for k, v in pairs(Config.BigBanks["paleto"]["lockers"]) do
+                            local lockerDist = #(pos - Config.BigBanks["paleto"]["lockers"][k]["coords"])
+                            if not Config.BigBanks["paleto"]["lockers"][k]["isBusy"] then
+                                if not Config.BigBanks["paleto"]["lockers"][k]["isOpened"] then
+                                    if lockerDist < 5 then
+                                        inRange = true
+                                        DrawMarker(2, Config.BigBanks["paleto"]["lockers"][k]["coords"].x, Config.BigBanks["paleto"]["lockers"][k]["coords"].y, Config.BigBanks["paleto"]["lockers"][k]["coords"].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.05, 255, 255, 255, 255, false, false, false, 1, false, false, false)
+                                        if lockerDist < 0.5 then
+                                            DrawText3Ds(Config.BigBanks["paleto"]["lockers"][k]["coords"].x, Config.BigBanks["paleto"]["lockers"][k]["coords"].y, Config.BigBanks["paleto"]["lockers"][k]["coords"].z + 0.3, '[E] Crack the vault')
+                                            if IsControlJustPressed(0, 38) then
+                                                if CurrentCops >= Config.MinimumPaletoPolice then
+                                                    openLocker("paleto", k)
+                                                else
+                                                    QBCore.Functions.Notify('Minimum Of '..Config.MinimumPaletoPolice..' Police Needed', "error")
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                if not inRange then
+                    Wait(2500)
+                end
+            end
+            Wait(1)
+        end
+    end)
+end
