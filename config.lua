@@ -6,20 +6,21 @@ Config.DebugPoly = false
 Config.ItemTiers = 1
 
 -- Minimum Police Needed
-Config.MinimumThermitePolice = 0
-Config.MinimumFleecaPolice = 0
-Config.MinimumPaletoPolice = 0
-Config.MinimumPacificPolice = 0
-Config.MinimumVaultPolice = 0 -- K4MBI MAP
+Config.MinimumThermitePolice = 2
+Config.MinimumFleecaPolice = 4
+Config.MinimumPaletoPolice = 5
+Config.MinimumPacificPolice = 6
+Config.MinimumVaultPolice = 6 -- K4MBI MAP
 
 -- Wait Times for Vault Opening
-Config.FleecaVaultWait = 180000 -- 3 Mins
-Config.PaletoVaultWait = 300000 -- 5 Mins
-Config.PacificVaultWait = 300000 -- 5 Mins
+Config.FleecaVaultWait = 60000 -- 1 Mins
+Config.PaletoVaultWait = 120000 -- 2 Mins
+Config.PacificVaultWait = 180000 -- 3 Mins
 
 -- Purchasable laptops
 Config.Laptops = true
 Config.LaptopPedLoc = vector4(-1360.10, -759.562, 21.304, 302.6)
+--Config.LaptopPedLoc = vector4(-1735.4, -111.35, 48.6, 220.32)
 
 -- Laptop Pricing for menu
 Config.PinkLaptopPrice = 10000
@@ -71,8 +72,8 @@ Config.minVaultGoldBars = 8
 Config.maxVaultGoldBars = 11
 
 -- Bank Cooldown
-Config.SmallBankTimer = 30
-Config.BigBankTimer = 60
+Config.SmallBankTimer = 60
+Config.BigBankTimer = 300
 
 -- Door Locks
 Config.PaletoDoor1 = 85
@@ -92,9 +93,9 @@ Config.ThermiteShow = 5
 Config.ThermiteTime = 45
 
 -- Fleeca Laptop Config
-Config.FleecaTime = 6
+Config.FleecaTime = 10
 Config.FleecaBlocks = 4
-Config.FleecaRepeat = 3
+Config.FleecaRepeat = 2
 
 -- Paleto Laptop Config
 Config.PaletoTime = 7
@@ -131,9 +132,11 @@ Config.LockerRewards = {
     },
     ["tier2"] = {
         [1] = {item = "rolex", minAmount = 5, maxAmount = 15},
+        [2] = {item = "security_card_01", minAmount = 0, maxAmount = 2},
     },
     ["tier3"] = {
         [1] = {item = "goldbar", minAmount = 1, maxAmount = 2},
+        [2] = {item = "laptop_blue", minAmount = 0, maxAmount = 2},
     },
 }
 
@@ -143,9 +146,11 @@ Config.LockerRewardsPaleto = {
     },
     ["tier2"] = {
         [1] = {item = "rolex", minAmount = 10, maxAmount = 20},
+        [2] = {item = "security_card_02", minAmount = 0, maxAmount = 2},
     },
     ["tier3"] = {
         [1] = {item = "goldbar", minAmount = 2, maxAmount = 4},
+        [2] = {item = "laptop_red", minAmount = 0, maxAmount = 2},
     },
 }
 
@@ -155,9 +160,11 @@ Config.LockerRewardsPacific = {
     },
     ["tier2"] = {
         [1] = {item = "goldbar", minAmount = 4, maxAmount = 8},
+        [2] = {item = "security_card_03", minAmount = 0, maxAmount = 2},
     },
     ["tier3"] = {
         [1] = {item = "goldbar", minAmount = 4, maxAmount = 8},
+        [2] = {item = "laptop_gold", minAmount = 0, maxAmount = 2},
     },
 }
 
